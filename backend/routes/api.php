@@ -35,4 +35,18 @@ Route::middleware('auth:sanctum')->group(function () {
         // Destroy
         Route::post('/destroy', [CategoryController::class, 'destroy']);
     });
+
+    // Product
+    Route::prefix('product')->group(function () {
+        // Index
+        Route::get('/index', [ProductController::class, 'index']);
+        // Store
+        Route::post('/store', [ProductController::class, 'store']);
+        // Show
+        Route::post('/show', [ProductController::class, 'show']);
+        // Update
+        Route::post('/update', [ProductController::class, 'update']);
+        // Destroy
+        Route::post('/destroy', [ProductController::class, 'destroy']);
+    });
 });

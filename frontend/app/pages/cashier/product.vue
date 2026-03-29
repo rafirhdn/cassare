@@ -63,7 +63,7 @@
                </button>
 
                <div v-if="filterCategory" class="w-35 absolute top-12 left-0 bg-dark-theme-900 border border-dark-theme-800 rounded-sm overflow-hidden z-10">
-                  <button class="w-full flex flex-row justify-center items-center px-2 py-2 text-base tracking-tight hover:bg-dark-theme-800 hover:cursor-pointer">Sayur</button>
+                  <button class="w-full flex flex-row justify-center items-center px-2 py-2 text-base tracking-tight hover:bg-dark-theme-800 hover:cursor-pointer"></button>
                </div>
             </div>
          </div>

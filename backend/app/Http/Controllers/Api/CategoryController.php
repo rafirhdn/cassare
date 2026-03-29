@@ -29,11 +29,11 @@ class CategoryController extends Controller
             'photo' => 'required|image|mimes:jpg,jpeg,png|max:5120',
         ], [
             'name.required' => 'Nama kategori wajib diisi!',
-            'name.max' => 'Nama kategori melebihi batas!',
+            'name.max'      => 'Nama kategori melebihi batas!',
             'name.unique'   => 'Nama kategori sudah digunakan!',
-            'photo.image' => 'Foto kategori wajib diupload!',
-            'photo.mimes' => 'Format foto kategori harus jpg, jpeg, atau png!',
-            'photo.max' => 'Ukuran foto kategori maksimal 5MB!',
+            'photo.image'   => 'Foto kategori wajib diupload!',
+            'photo.mimes'   => 'Format foto kategori harus jpg, jpeg, atau png!',
+            'photo.max'     => 'Ukuran foto kategori maksimal 5MB!',
         ]);
 
         if ($validator->fails()) {
@@ -87,9 +87,9 @@ class CategoryController extends Controller
             'name.required' => 'Nama kategori wajib diisi!',
             'name.max'      => 'Nama kategori melebihi batas!',
             'name.unique'   => 'Nama kategori sudah digunakan!',
-            'photo.image' => 'Foto kategori wajib diupload!',
-            'photo.mimes'    => 'Format foto kategori harus jpg, jpeg, atau png!',
-            'photo.max'      => 'Ukuran foto kategori maksimal 5MB!',
+            'photo.image'   => 'Foto kategori wajib diupload!',
+            'photo.mimes'   => 'Format foto kategori harus jpg, jpeg, atau png!',
+            'photo.max'     => 'Ukuran foto kategori maksimal 5MB!',
         ]);
 
         if ($validator->fails()) {
