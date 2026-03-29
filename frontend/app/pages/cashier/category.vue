@@ -73,8 +73,8 @@
       <!-- Wrapper -->
       <div class="px-4 py-2 grid grid-cols-3 gap-4">
          <!-- Card -->
-         <div v-for="item in categories" :key="item.id_category" class="bg-dark-theme-900 rounded-sm p-4 border border-dark-theme-800 flex flex-col gap-3">
-            <div class="w-full h-44 rounded-sm overflow-hidden">
+         <div v-for="item in categories" :key="item.id_category" class="bg-dark-theme-900 rounded-sm p-4 flex flex-col gap-3">
+            <div class="w-full h-44 min-[1400px]:h-54 rounded-sm overflow-hidden">
                <img :src="item.photo" :alt="item.name" src="" alt="" class="w-full h-full object-cover" />
             </div>
             <div>
@@ -102,7 +102,7 @@
 <script setup>
 // Import
 import { useCategoryStore } from '~/stores/category'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 
 // Variable
 const config = useRuntimeConfig()

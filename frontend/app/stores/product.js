@@ -1,27 +1,28 @@
 import { defineStore } from 'pinia'
 
 export const useProductStore = defineStore('product', {
-   // State (Save Data)
    state: () => ({
-      name:        '',
-      photo:       null,
-      stock:       '',
-      price:       '',
+      name: '',
+      stock: '',
+      price: '',
       description: '',
-      type:        '',
-      status:      '',
-      estimate:    '',
+      photo: null,
+      type: '',
+      status: '',
+      estimate: '',
       id_category: '',
    }),
 
-   // Getters (Take Data From State)
    getters: {},
 
-   // Actions (Function To Change Data)
    actions: {
-      // Get Token
       getToken() {
          return localStorage.getItem('token')
+      },
+
+      getIdAdmin() {
+         const admin = localStorage.getItem('admin')
+         return admin ? JSON.parse(admin).id_admin : null
       },
 
       // Index
@@ -48,14 +49,14 @@ export const useProductStore = defineStore('product', {
          const config = useRuntimeConfig()
          try {
             const formData = new FormData()
-            formData.append('name',        this.name)
-            formData.append('photo',       this.photo)
-            formData.append('stock',       this.stock)
-            formData.append('price',       this.price)
+            formData.append('name', this.name)
+            formData.append('stock', this.stock)
+            formData.append('price', this.price)
             formData.append('description', this.description)
-            formData.append('type',        this.type)
-            formData.append('status',      this.status)
-            formData.append('estimate',    this.estimate)
+            formData.append('photo', this.photo)
+            formData.append('type', this.type)
+            formData.append('status', this.status)
+            formData.append('estimate', this.estimate)
             formData.append('id_category', this.id_category)
 
             const response = await fetch(`${config.public.apiKey}/product/store`, {
@@ -100,14 +101,14 @@ export const useProductStore = defineStore('product', {
          const config = useRuntimeConfig()
          try {
             const formData = new FormData()
-            formData.append('id_product',  id_product)
-            formData.append('name',        this.name)
-            formData.append('stock',       this.stock)
-            formData.append('price',       this.price)
+            formData.append('id_product', id_product)
+            formData.append('name', this.name)
+            formData.append('stock', this.stock)
+            formData.append('price', this.price)
             formData.append('description', this.description)
-            formData.append('type',        this.type)
-            formData.append('status',      this.status)
-            formData.append('estimate',    this.estimate)
+            formData.append('type', this.type)
+            formData.append('status', this.status)
+            formData.append('estimate', this.estimate)
             formData.append('id_category', this.id_category)
 
             if (this.photo) {

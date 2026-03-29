@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Transaction extends Model
+class Cart extends Model
 {
-    protected $table = "transaction"; // Name Table
+    protected $table = "cart"; // Name Table
 
     protected $primaryKey = "id_transaction"; // Primary Key
 
@@ -14,5 +14,5 @@ class Transaction extends Model
 
     public $timestamps = true; // Timestamps
 
-    protected $fillable = ['id_transaction', 'price', 'profit', 'detail', 'time', 'id_admin', 'id_product']; // Field Table
+    protected $fillable = ['id_cart', 'price', 'time', 'id_admin', 'id_product']; // Field Table
 }

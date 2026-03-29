@@ -14,5 +14,5 @@ class Product extends Model
 
     public $timestamps = true; // Timestamps
 
-    protected $fillable = ['id_product', 'name', 'stock', 'price', 'photo', 'description', 'type', 'status', 'estimate', 'id_category']; // Field Table
+    protected $fillable = ['id_product', 'name', 'stock', 'price', 'photo', 'barcode', 'description', 'type', 'status', 'estimate', 'id_category', 'id_admin']; // Field Table
 }

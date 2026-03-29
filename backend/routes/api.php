@@ -5,7 +5,7 @@ use App\Http\Controllers\Api\AuthenticationController;
 use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\CategoryController;
-use App\Http\Controllers\Api\TransactionController;
+use App\Http\Controllers\Api\CartController;
 
 // Login
 Route::post('/login', [AuthenticationController::class, 'login']);

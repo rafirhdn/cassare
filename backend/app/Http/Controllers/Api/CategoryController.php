@@ -81,7 +81,7 @@ class CategoryController extends Controller
     public function update(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:50|unique:category,name',
+            'name'  => 'required|string|max:50|unique:category,name',
             'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:5120',
         ], [
             'name.required' => 'Nama kategori wajib diisi!',

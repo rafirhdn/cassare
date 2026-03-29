@@ -18,7 +18,7 @@
             </span>
 
             <!-- Button -->
-            <button class="bg-dark-theme-50 rounded-sm tracking-tight font-normal flex flex-row gap-2 py-1 px-4 hover:bg-dark-theme-400 text-dark-theme-950 hover:cursor-pointer text-sm items-center">
+            <button @click="addProduct = true" class="bg-dark-theme-50 rounded-sm tracking-tight font-normal flex flex-row gap-2 py-1 px-4 hover:bg-dark-theme-400 text-dark-theme-950 hover:cursor-pointer text-sm items-center">
                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                   <rect width="24" height="24" fill="none" />
                   <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5" d="M15 12h-3m0 0H9m3 0V9m0 3v3m10-3c0 4.714 0 7.071-1.465 8.535C19.072 22 16.714 22 12 22s-7.071 0-8.536-1.465C2 19.072 2 16.714 2 12s0-7.071 1.464-8.536C4.93 2 7.286 2 12 2s7.071 0 8.535 1.464c.974.974 1.3 2.343 1.41 4.536" />
@@ -71,28 +71,69 @@
       </div>
 
       <!-- Wrapper -->
-      <div class="px-4 py-1 grid grid-cols-3 gap-4">
+      <div class="px-4 py-2 grid grid-cols-3 gap-4">
          <!-- Card -->
-         <div></div>
+         <div v-for="item in products" :key="item.id_product" class="bg-dark-theme-900 rounded-sm p-4 flex flex-col gap-3">
+            <div class="w-full h-44 min-[1400px]:h-54 rounded-sm overflow-hidden">
+               <img :src="item.photo" :alt="item.name" class="w-full h-full object-cover" />
+            </div>
+            <div>
+               <span class="text-dark-theme-50 text-base tracking-tight font-normal">{{ item.name }}</span>
+            </div>
+            <!-- Button -->
+            <div class="flex flex-row gap-2">
+               <button @click="openEdit(item)" class="bg-dark-theme-50 text-dark-theme-950 py-2 flex-1 text-sm font-normal tracking-tight rounded-sm hover:bg-dark-theme-400 cursor-pointer">Edit</button>
+               <button
+                  @click="
+                     deleteProduct = true;
+                     selectedId = item.id_product
+                  "
+                  class="bg-dark-theme-800 text-dark-theme-50 py-2 flex-1 text-sm font-normal tracking-tight rounded-sm hover:bg-dark-theme-600 cursor-pointer">
+                  Hapus
+               </button>
+            </div>
+         </div>
       </div>
 
       <!-- Component -->
-      <AddProduct v-model="addProduct" />
-      <DeleteProduct v-model="deleteProduct" />
-      <EditProduct v-model="editProduct" />
+      <AddProduct v-model="addProduct" @added="fetchProducts" />
+      <EditProduct v-model="editProduct" :idProduct="selectedProduct?.id_product" :productName="selectedProduct?.name" :productPhoto="selectedProduct?.photo" :productStock="selectedProduct?.stock" :productPrice="selectedProduct?.price" :productDescription="selectedProduct?.description" :productType="selectedProduct?.type" :productStatus="selectedProduct?.status" :productEstimate="selectedProduct?.estimate" :productCategoryId="selectedProduct?.id_category" :productCategoryName="selectedProduct?.category_name" @updated="fetchProducts" />
+      <DeleteProduct v-model="deleteProduct" :idProduct="selectedId" @deleted="fetchProducts" />
    </div>
 </template>
 
 <script setup>
 // Import
+import { useProductStore } from '~/stores/product'
 import { ref, onMounted, onUnmounted } from 'vue'
 
 // Variable
+const config = useRuntimeConfig()
+const product = useProductStore()
+const products = ref([])
+const selectedId = ref(null)
+const selectedProduct = ref(null)
 const filter = ref(false)
 const filterRef = ref(null)
 const addProduct = ref(false)
-const deleteProduct = ref(false)
 const editProduct = ref(false)
+const deleteProduct = ref(false)
+
+// Open Edit Form Function
+const openEdit = (item) => {
+   selectedProduct.value = item
+   editProduct.value = true
+}
+
+// Fetch Product Data Function
+const fetchProducts = async () => {
+   const data = await product.index()
+   products.value = data.data.map((item) => ({
+      ...item,
+      photo: `${config.public.baseKey}/uploads/product/${item.photo}`,
+      category_name: item.category?.name || '',
+   }))
+}
 
 // Click Outside Function
 const handleClickOutside = (event) => {
@@ -101,7 +142,10 @@ const handleClickOutside = (event) => {
    }
 }
 
-onMounted(() => document.addEventListener('click', handleClickOutside))
+onMounted(() => {
+   fetchProducts()
+   document.addEventListener('click', handleClickOutside)
+})
 onUnmounted(() => document.removeEventListener('click', handleClickOutside))
 
 // Layout Cashier

@@ -11,9 +11,9 @@ use App\Models\Product;
 class ProductController extends Controller
 {
     // Index
-    public function index()
+    public function index(Request $request)
     {
-        $product = Product::all();
+        $product = Product::where('id_admin', $request->user()->id_admin)->get();
 
         return response()->json([
             'success' => true,
@@ -26,10 +26,10 @@ class ProductController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name'        => 'required|string|max:100|unique:product,name',
-            'photo'       => 'required|image|mimes:jpg,jpeg,png|max:5120',
             'stock'       => 'required|integer|min:0',
             'price'       => 'required|string|min:0',
-            'description' => 'nullable|string',
+            'description' => 'required|string|max:255',
+            'photo'       => 'required|image|mimes:jpg,jpeg,png|max:5120',
             'type'        => 'required|in:Pra-pesan,Siap-pesan',
             'status'      => 'required|in:Tersedia,Tidak Tersedia',
             'estimate'    => 'required|in:Langsung Ambil,7 Hari Kerja',
@@ -38,14 +38,14 @@ class ProductController extends Controller
             'name.required'        => 'Nama produk wajib diisi!',
             'name.max'             => 'Nama produk melebihi batas!',
             'name.unique'          => 'Nama produk sudah digunakan!',
-            'photo.image'          => 'Foto produk harus diupload!',
-            'photo.mimes'          => 'Format foto produk harus jpg, jpeg, atau png!',
-            'photo.max'            => 'Ukuran foto produk maksimal 5MB!',
             'stock.required'       => 'Stok produk wajib diisi!',
             'stock.integer'        => 'Stok produk harus berupa angka!',
             'price.required'       => 'Harga produk wajib diisi!',
             'description.required' => 'Deskripsi produk wajib diisi!',
             'description.max'      => 'Deskripsi produk melebihi batas!',
+            'photo.image'          => 'Foto produk wajib diupload!',
+            'photo.mimes'          => 'Format foto produk harus jpg, jpeg, atau png!',
+            'photo.max'            => 'Ukuran foto produk maksimal 5MB!',
             'type.required'        => 'Tipe produk wajib dipilih!',
             'status.required'      => 'Status produk wajib dipilih!',
             'estimate.required'    => 'Estimasi produk wajib dipilih!',
@@ -63,16 +63,20 @@ class ProductController extends Controller
         $photoName = $slugName . '_' . time() . '.' . $request->photo->extension();
         $request->photo->move(public_path('uploads/product'), $photoName);
 
+        $barcode = 'PRD-' . str_pad(Product::count() + 1, 4, '0', STR_PAD_LEFT) . '-' . date('Ymd');
+
         $product = Product::create([
             'name'        => $request->name,
-            'photo'       => $photoName,
             'stock'       => $request->stock,
             'price'       => $request->price,
             'description' => $request->description,
+            'photo'       => $photoName,
+            'barcode'     => $barcode,
             'type'        => $request->type,
             'status'      => $request->status,
             'estimate'    => $request->estimate,
             'id_category' => $request->id_category,
+            'id_admin'    => $request->user()->id_admin,
         ]);
 
         return response()->json([
@@ -83,9 +87,9 @@ class ProductController extends Controller
     }
 
     // Show
-    public function show(string $id)
+    public function show(Request $request)
     {
-        $product = Product::find($id);
+        $product = Product::find($request->id_product);
 
         if (!$product) {
             return response()->json([
@@ -105,10 +109,10 @@ class ProductController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name'        => 'required|string|max:100|unique:product,name,' . $request->id_product . ',id_product',
-            'photo'       => 'nullable|image|mimes:jpg,jpeg,png|max:5120',
             'stock'       => 'required|integer|min:0',
             'price'       => 'required|string|min:0',
-            'description' => 'nullable|string',
+            'description' => 'required|string|max:255',
+            'photo'       => 'nullable|image|mimes:jpg,jpeg,png|max:5120',
             'type'        => 'required|in:Pra-pesan,Siap-pesan',
             'status'      => 'required|in:Tersedia,Tidak Tersedia',
             'estimate'    => 'required|in:Langsung Ambil,7 Hari Kerja',
@@ -117,14 +121,14 @@ class ProductController extends Controller
             'name.required'        => 'Nama produk wajib diisi!',
             'name.max'             => 'Nama produk melebihi batas!',
             'name.unique'          => 'Nama produk sudah digunakan!',
-            'photo.image'          => 'Foto produk harus diupload!',
-            'photo.mimes'          => 'Format foto produk harus jpg, jpeg, atau png!',
-            'photo.max'            => 'Ukuran foto produk maksimal 5MB!',
             'stock.required'       => 'Stok produk wajib diisi!',
             'stock.integer'        => 'Stok produk harus berupa angka!',
             'price.required'       => 'Harga produk wajib diisi!',
             'description.required' => 'Deskripsi produk wajib diisi!',
             'description.max'      => 'Deskripsi produk melebihi batas!',
+            'photo.image'          => 'Foto produk wajib diupload!',
+            'photo.mimes'          => 'Format foto produk harus jpg, jpeg, atau png!',
+            'photo.max'            => 'Ukuran foto produk maksimal 5MB!',
             'type.required'        => 'Tipe produk wajib dipilih!',
             'status.required'      => 'Status produk wajib dipilih!',
             'estimate.required'    => 'Estimasi produk wajib dipilih!',
@@ -162,10 +166,10 @@ class ProductController extends Controller
 
         $product->update([
             'name'        => $request->name,
-            'photo'       => $photoName,
             'stock'       => $request->stock,
             'price'       => $request->price,
             'description' => $request->description,
+            'photo'       => $photoName,
             'type'        => $request->type,
             'status'      => $request->status,
             'estimate'    => $request->estimate,
@@ -182,9 +186,7 @@ class ProductController extends Controller
     // Destroy
     public function destroy(Request $request)
     {
-        $id_product = $request->id_product;
-
-        $product = Product::find($id_product);
+        $product = Product::find($request->id_product);
 
         if (!$product) {
             return response()->json([

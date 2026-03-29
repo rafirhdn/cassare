@@ -5,7 +5,7 @@
          <div class="flex flex-col items-baseline justify-center gap-4 w-full">
             <!-- Small Title -->
             <div>
-               <span class="text-dark-theme-50 text-base font-normal tracking-tight">Apa anda yakin ingin menghapus kategori ini?</span>
+               <span class="text-dark-theme-50 text-base font-normal tracking-tight">Apa anda yakin ingin menghapus kategori ini yang sudah dibuat?</span>
             </div>
             <!-- Button -->
             <div class="flex flex-row gap-2">
