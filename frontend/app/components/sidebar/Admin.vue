@@ -1,27 +1,27 @@
 <template>
    <div class="max-w-3xs w-full h-screen flex flex-col items-baseline gap bg-dark-theme-900 border-r border-dark-theme-800 font-mono text-dark-theme-50">
-      <!-- Title -->
-      <div class="w-full border-b border-dark-theme-800">
-         <div class="px-2 py-2.5">
-            <span class="flex flex-row gap-2 p-2 text-base tracking-tight">
-               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                  <rect width="24" height="24" fill="none" />
-                  <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5">
-                     <path d="m15 11l1 6m-7-6l-1 6M9 6V5a3 3 0 1 1 6 0v1" />
-                     <path d="M20.224 12.526c-.586-3.121-.878-4.682-1.99-5.604C17.125 6 15.537 6 12.36 6h-.72c-3.176 0-4.764 0-5.875.922s-1.403 2.483-1.989 5.604c-.823 4.389-1.234 6.583-.034 8.029S7.174 22 11.639 22h.722c4.465 0 6.698 0 7.897-1.445c.696-.84.85-1.93.696-3.555" />
-                  </g>
-               </svg>
-               Cassare
-            </span>
-         </div>
+      <!-- Wrapper -->
+      <div class="w-full border-b border-dark-theme-800 px-2 py-3">
+         <!-- Title -->
+         <span class="flex flex-row gap-2 p-2 text-base tracking-tight">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+               <rect width="24" height="24" fill="none" />
+               <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5">
+                  <path d="m15 11l1 6m-7-6l-1 6M9 6V5a3 3 0 1 1 6 0v1" />
+                  <path d="M20.224 12.526c-.586-3.121-.878-4.682-1.99-5.604C17.125 6 15.537 6 12.36 6h-.72c-3.176 0-4.764 0-5.875.922s-1.403 2.483-1.989 5.604c-.823 4.389-1.234 6.583-.034 8.029S7.174 22 11.639 22h.722c4.465 0 6.698 0 7.897-1.445c.696-.84.85-1.93.696-3.555" />
+               </g>
+            </svg>
+            Cassare
+         </span>
       </div>
 
-      <div class="w-full h-screen py-4 px-2 flex flex-col items-baseline gap-0.5">
-         <!-- Home -->
+      <!-- Wrapper -->
+      <div class="w-full h-screen py-4 px-2 flex flex-col items-baseline gap-1">
+         <!-- Link -->
          <div
-            class="w-full py-1.5 px-2 rounded-md hover:bg-dark-theme-800/50 hover:cursor-pointer"
+            class="w-full py-2 px-2 rounded-sm hover:bg-dark-theme-800 hover:cursor-pointer"
             :class="{
-               'bg-dark-theme-800/50': active('/admin/home'),
+               'bg-dark-theme-800': active('/admin/home'),
             }">
             <NuxtLink to="/admin/home" class="flex flex-row gap-2 text-base tracking-tight">
                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
@@ -32,11 +32,11 @@
             </NuxtLink>
          </div>
 
-         <!-- Cashier -->
+         <!-- Link -->
          <div
-            class="w-full py-1.5 px-2 rounded-md hover:bg-dark-theme-800/50 hover:cursor-pointer"
+            class="w-full py-2 px-2 rounded-sm hover:bg-dark-theme-800 hover:cursor-pointer"
             :class="{
-               'bg-dark-theme-800/50': active('/admin/cashier'),
+               'bg-dark-theme-800': active('/admin/cashier'),
             }">
             <NuxtLink to="/admin/cashier" class="flex flex-row gap-2 text-base tracking-tight">
                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
@@ -50,11 +50,11 @@
             </NuxtLink>
          </div>
 
-         <!-- Report -->
+         <!-- Link -->
          <div
-            class="w-full py-1.5 px-2 rounded-md hover:bg-dark-theme-800/50 hover:cursor-pointer"
+            class="w-full py-2 px-2 rounded-sm hover:bg-dark-theme-800 hover:cursor-pointer"
             :class="{
-               'bg-dark-theme-800/50': active('/admin/report'),
+               'bg-dark-theme-800': active('/admin/report'),
             }">
             <NuxtLink to="/admin/report" class="flex flex-row gap-2 text-base tracking-tight">
                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
@@ -68,12 +68,13 @@
             </NuxtLink>
          </div>
 
-         <div class="w-full flex flex-col gap-0.5 mt-auto">
-            <!-- Profile -->
+         <!-- Wrapper -->
+         <div class="w-full flex flex-col gap-1 mt-auto">
+            <!-- Link -->
             <div
-               class="w-full py-1.5 px-2 rounded-md hover:bg-dark-theme-800/50 hover:cursor-pointer"
+               class="w-full py-2 px-2 rounded-sm hover:bg-dark-theme-800 hover:cursor-pointer"
                :class="{
-                  'bg-dark-theme-800/50': active('/admin/profile'),
+                  'bg-dark-theme-800': active('/admin/profile'),
                }">
                <NuxtLink to="/admin/profile" class="flex flex-row gap-2 text-base tracking-tight">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
@@ -88,8 +89,8 @@
                </NuxtLink>
             </div>
 
-            <!-- Logout -->
-            <div class="w-full py-1.5 px-2 rounded-md hover:bg-dark-theme-800/50 hover:cursor-pointer">
+            <!-- Button -->
+            <div class="w-full py-2 px-2 rounded-sm hover:bg-dark-theme-800 hover:cursor-pointer">
                <button @click="auth.logout().then(() => $router.push('/login'))" class="flex flex-row gap-2 text-base tracking-tight hover:cursor-pointer">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                      <rect width="24" height="24" fill="none" />
@@ -114,6 +115,6 @@ import { useAuthenticationStore } from '~/stores/authentication'
 const auth = useAuthenticationStore()
 const route = useRoute()
 
-// Check Page
+// Check Route Function
 const active = (path) => route.path === path || route.path.startsWith(path)
 </script>

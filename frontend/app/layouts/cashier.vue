@@ -1,10 +1,10 @@
 <template>
-   <div class="flex h-screen">
-      <!-- Cashier Sidebar -->
+   <div class="flex h-screen overflow-hidden">
+      <!-- Sidebar -->
       <SidebarCashier />
 
-      <!-- Cashier Page -->
-      <main class="flex-1 bg-dark-theme-950">
+      <!-- Main -->
+      <main class="flex-1 bg-dark-theme-950 overflow-y-auto">
          <slot />
       </main>
    </div>

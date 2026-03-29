@@ -1,8 +1,8 @@
 <template>
    <div class="font-mono">
-      <!-- Headers -->
+      <!-- Wrapper -->
       <div class="w-full border-b border-dark-theme-800">
-         <div class="px-4 py-4.5">
+         <div class="px-4 py-5">
             <div class="flex flex-row">
                <!-- Title -->
                <div>
@@ -20,27 +20,27 @@
          </div>
       </div>
 
-      <!-- Content -->
+      <!-- Wrapper -->
       <div class="w-full flex flex-row gap-4 p-4 items-center justify-center flex-1">
-         <!-- Cashier Card -->
+         <!-- Card -->
          <div class="w-full rounded-lg bg-dark-theme-900 border border-dark-theme-800 px-6 py-4 flex flex-col items-baseline justify-baseline gap-2">
             <div class="flex flex-col items-baseline justify-baseline gap-1">
-               <span class="text-dark-theme-300 text-sm tracking-tight">Jumlah Kasir</span>
+               <span class="text-dark-theme-200 text-md tracking-tight">Total Akun Kasir</span>
                <span class="text-dark-theme-50 text-4xl tracking-tight">20</span>
             </div>
             <div>
-               <span class="text-dark-theme-300 text-sm tracking-tight">Total seluruh kasir saat ini.</span>
+               <span class="text-dark-theme-400 text-sm tracking-tight">Jumlah seluruh akun kasir saat ini.</span>
             </div>
          </div>
 
-         <!-- Report Card -->
+         <!-- Card -->
          <div class="w-full rounded-lg bg-dark-theme-900 border border-dark-theme-800 px-6 py-4 flex flex-col items-baseline justify-baseline gap-2">
             <div class="flex flex-col items-baseline justify-baseline gap-1">
-               <span class="text-dark-theme-300 text-sm tracking-tight">Hasil Laporan</span>
+               <span class="text-dark-theme-200 text-md tracking-tight">Total Perhitungan Laporan</span>
                <span class="text-dark-theme-50 text-4xl tracking-tight">Rp57.212,00</span>
             </div>
             <div>
-               <span class="text-dark-theme-300 text-sm tracking-tight">Hasil perhitungan keuntungan laporan.</span>
+               <span class="text-dark-theme-400 text-sm tracking-tight">Jumlah seluruh keuntungan di laporan.</span>
             </div>
          </div>
       </div>

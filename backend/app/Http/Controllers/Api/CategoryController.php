@@ -25,14 +25,15 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:50',
+            'name' => 'required|string|max:50|unique:category,name',
             'photo' => 'required|image|mimes:jpg,jpeg,png|max:5120',
         ], [
             'name.required' => 'Nama kategori wajib diisi!',
-            'name.max'      => 'Nama kategori melebihi batas!',
-            'photo.required' => 'Foto kategori wajib diupload!',
-            'photo.mimes'    => 'Format foto kategori harus jpg, jpeg, atau png!',
-            'photo.max'      => 'Ukuran foto kategori maksimal 5MB!',
+            'name.max' => 'Nama kategori melebihi batas!',
+            'name.unique'   => 'Nama kategori sudah digunakan!',
+            'photo.image' => 'Foto kategori wajib diupload!',
+            'photo.mimes' => 'Format foto kategori harus jpg, jpeg, atau png!',
+            'photo.max' => 'Ukuran foto kategori maksimal 5MB!',
         ]);
 
         if ($validator->fails()) {
@@ -77,15 +78,16 @@ class CategoryController extends Controller
     }
 
     // Update
-    public function update(Request $request, string $id_category)
+    public function update(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:50',
-            'photo' => 'required|image|mimes:jpg,jpeg,png|max:5120',
+            'name' => 'required|string|max:50|unique:category,name',
+            'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:5120',
         ], [
             'name.required' => 'Nama kategori wajib diisi!',
             'name.max'      => 'Nama kategori melebihi batas!',
-            'photo.required' => 'Foto kategori wajib diupload!',
+            'name.unique'   => 'Nama kategori sudah digunakan!',
+            'photo.image' => 'Foto kategori wajib diupload!',
             'photo.mimes'    => 'Format foto kategori harus jpg, jpeg, atau png!',
             'photo.max'      => 'Ukuran foto kategori maksimal 5MB!',
         ]);
@@ -97,7 +99,7 @@ class CategoryController extends Controller
             ], 422);
         }
 
-        $category = Category::find($id_category);
+        $category = Category::find($request->id_category);
 
         if (!$category) {
             return response()->json([
@@ -132,10 +134,11 @@ class CategoryController extends Controller
     }
 
     // Destroy
-    public function destroy(string $id_category)
+    public function destroy(Request $request)
     {
-        $category = Category::find($id_category);
+        $id_category = $request->id_category;
 
+        $category = Category::find($id_category);
         if (!$category) {
             return response()->json([
                 'success' => false,

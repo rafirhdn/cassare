@@ -7,6 +7,9 @@ export const useCategoryStore = defineStore('category', {
       photo: null,
    }),
 
+   // Getters (Take Data From State)
+   getters: {},
+
    // Actions (Function To Change Data)
    actions: {
       // Get Token

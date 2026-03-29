@@ -1,6 +1,6 @@
 <template>
    <div>
-      <!-- Auth Page -->
+      <!-- Main -->
       <main>
          <slot />
       </main>
