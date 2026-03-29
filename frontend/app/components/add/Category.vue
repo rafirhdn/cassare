@@ -26,7 +26,7 @@
                </div>
 
                <!-- Input Box Category Photo -->
-               <div @click="$refs.photoInput.click()" class="relative text-dark-theme-300 w-full h-54 rounded-lg border-2 border-dashed border-dark-theme-800 bg-dark-theme-900/95 overflow-hidden flex flex-col items-center justify-center gap-2 cursor-pointer hover:border-dark-theme-700 hover:bg-dark-theme-800/95 transition-all">
+               <div @click="$refs.photoInput.click()" class="relative text-dark-theme-300 w-full h-54 rounded-lg border border-dark-theme-800 bg-dark-theme-900/95 overflow-hidden flex flex-col items-center justify-center gap-2 cursor-pointer hover:bg-dark-theme-800 transition-all">
                   <img v-if="photo" :src="photo" class="absolute inset-0 w-full h-full object-contain" />
                   <div v-else class="flex flex-col items-center justify-center gap-2">
                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">

@@ -22,25 +22,25 @@
 
       <!-- Content -->
       <div class="w-full flex flex-row gap-4 p-4 items-center justify-center flex-1">
-         <!-- Cahsier Card -->
+         <!-- Product Card -->
          <div class="w-full rounded-lg bg-dark-theme-900 border border-dark-theme-800 px-6 py-4 flex flex-col items-baseline justify-baseline gap-2">
             <div class="flex flex-col items-baseline justify-baseline gap-1">
                <span class="text-dark-theme-300 text-sm tracking-tight">Jumlah Produk</span>
                <span class="text-dark-theme-50 text-4xl tracking-tight">36</span>
             </div>
             <div>
-               <span class="text-dark-theme-100 text-sm tracking-tight">Total produk yang dijual.</span>
+               <span class="text-dark-theme-100 text-sm tracking-tight">Total seluruh produk yang dijual.</span>
             </div>
          </div>
 
-         <!-- Report Card -->
+         <!-- Category Card -->
          <div class="w-full rounded-lg bg-dark-theme-900 border border-dark-theme-800 px-6 py-4 flex flex-col items-baseline justify-baseline gap-2">
             <div class="flex flex-col items-baseline justify-baseline gap-1">
-               <span class="text-dark-theme-300 text-sm tracking-tight">Total Transaksi</span>
+               <span class="text-dark-theme-300 text-sm tracking-tight">Jumlah Kategori</span>
                <span class="text-dark-theme-50 text-4xl tracking-tight">18</span>
             </div>
             <div>
-               <span class="text-dark-theme-100 text-sm tracking-tight">Seluruh transaksi yang telah dilakukan.</span>
+               <span class="text-dark-theme-100 text-sm tracking-tight">Total seluruh kategori yang dibuat.</span>
             </div>
          </div>
       </div>
