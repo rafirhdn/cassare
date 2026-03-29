@@ -28,25 +28,37 @@
          </button>
       </div>
 
-      <!-- Feature -->
-      <div class="py-4 px-3.5 flex flex-row justify-between">
-         <!-- Filter Sort -->
-         <div class="w-35 text-dark-theme-50 relative">
-            <button @click="filter = !filter" class="w-full flex flex-row justify-center items-center gap-2 bg-dark-theme-900 border border-dark-theme-800 px-4 py-2 rounded-sm hover:bg-dark-theme-800 hover:cursor-pointer">
+      <!-- Wrapper -->
+      <div class="py-4 px-4 flex flex-row justify-between">
+         <!-- Button -->
+         <div ref="filterRef" class="w-30 text-dark-theme-50 relative">
+            <button @click="filter = !filter" class="w-full flex flex-row justify-base items-center gap-4 bg-dark-theme-900 border border-dark-theme-800 px-4 py-2 rounded-sm hover:bg-dark-theme-800 hover:cursor-pointer">
                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
                   <rect width="24" height="24" fill="none" />
                   <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5" d="M20.058 9.723c.948-.534 1.423-.801 1.682-1.232c.26-.43.26-.949.26-1.987v-.69c0-1.326 0-1.99-.44-2.402C21.122 3 20.415 3 19 3H5c-1.414 0-2.121 0-2.56.412S2 4.488 2 5.815v.69c0 1.037 0 1.556.26 1.986s.733.698 1.682 1.232l2.913 1.64c.636.358.955.537 1.183.735c.474.411.766.895.898 1.49c.064.284.064.618.064 1.285v2.67c0 .909 0 1.364.252 1.718c.252.355.7.53 1.594.88c1.879.734 2.818 1.101 3.486.683S15 19.452 15 17.542v-2.67c0-.666 0-1 .064-1.285a2.68 2.68 0 0 1 .899-1.49" />
                </svg>
-               <span class="text-base tracking-tight">Urutkan</span>
+               <span class="text-base tracking-tight">Filter</span>
             </button>
 
-            <div v-if="filter" class="w-35 absolute top-12 left-0 bg-dark-theme-900 border border-dark-theme-800 rounded-sm overflow-hidden z-10">
-               <button class="w-full flex flex-row justify-center items-center px-4 py-2 text-base tracking-tight hover:bg-dark-theme-800 hover:cursor-pointer">A - Z</button>
-               <button class="w-full flex flex-row justify-center items-center px-4 py-2 text-base tracking-tight hover:bg-dark-theme-800 hover:cursor-pointer">Z - A</button>
+            <div v-if="filter" class="w-30 absolute top-12 left-0 bg-dark-theme-900 border border-dark-theme-800 rounded-sm overflow-hidden z-10">
+               <button class="w-full flex flex-row justify-base items-center gap-4 px-4 py-2 text-base tracking-tight hover:bg-dark-theme-800 hover:cursor-pointer">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
+                     <rect width="24" height="24" fill="none" />
+                     <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m19 11l-7 6l-1.75-1.5M5 11l2.333 2M5 7l7 6l1.75-1.5M19 7l-2.333 2" />
+                  </svg>
+                  A - Z
+               </button>
+               <button class="w-full flex flex-row justify-base items-center gap-4 px-4 py-2 text-base tracking-tight hover:bg-dark-theme-800 hover:cursor-pointer">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
+                     <rect width="24" height="24" fill="none" />
+                     <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m19 13l-7-6l-1.75 1.5M5 13l2.333-2M5 17l7-6l1.75 1.5M19 17l-2.333-2" />
+                  </svg>
+                  Z - A
+               </button>
             </div>
          </div>
 
-         <!-- Search Bar -->
+         <!-- Input Box -->
          <div class="text-dark-theme-50 relative">
             <div class="absolute inset-y-0 left-3 flex items-center pointer-events-none">
                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
@@ -58,9 +70,9 @@
          </div>
       </div>
 
-      <!-- Content -->
-      <div class="px-4 py-1 grid grid-cols-3 gap-4">
-         <!-- Card Category -->
+      <!-- Wrapper -->
+      <div class="px-4 py-2 grid grid-cols-3 gap-4">
+         <!-- Card -->
          <div v-for="item in categories" :key="item.id_category" class="bg-dark-theme-900 rounded-sm p-4 border border-dark-theme-800 flex flex-col gap-3">
             <div class="w-full h-44 rounded-sm overflow-hidden">
                <img :src="item.photo" :alt="item.name" src="" alt="" class="w-full h-full object-cover" />
@@ -68,6 +80,7 @@
             <div>
                <span class="text-dark-theme-50 text-base tracking-tight font-normal">{{ item.name }}</span>
             </div>
+            <!-- Button -->
             <div class="flex flex-row gap-2">
                <button @click="openEdit(item)" class="bg-dark-theme-50 text-dark-theme-950 py-2 flex-1 text-sm font-normal tracking-tight rounded-sm hover:bg-dark-theme-400 cursor-pointer">Edit</button>
                <button
@@ -79,7 +92,7 @@
          </div>
       </div>
 
-      <!-- Pop Up -->
+      <!-- Component -->
       <AddCategory v-model="addCategory" @added="fetchCategories" />
       <EditCategory v-model="editCategory" :id-category="selectedCategory?.id_category" :category-name="selectedCategory?.name" :category-photo="selectedCategory?.photo" @updated="fetchCategories" />
       <DeleteCategory v-model="deleteCategory" :id-category="selectedId" @deleted="fetchCategories" />
@@ -95,9 +108,10 @@ import { ref, onMounted } from 'vue'
 const config = useRuntimeConfig()
 const category = useCategoryStore()
 const categories = ref([])
-const filter = ref(false)
 const selectedId = ref(null)
 const selectedCategory = ref(null)
+const filter = ref(false)
+const filterRef = ref(null)
 const addCategory = ref(false)
 const editCategory = ref(false)
 const deleteCategory = ref(false)
@@ -116,7 +130,19 @@ const fetchCategories = async () => {
       photo: `${config.public.baseKey}/uploads/category/${item.photo}`,
    }))
 }
-onMounted(fetchCategories)
+
+// Click Outside Function
+const handleClickOutside = (event) => {
+   if (filterRef.value && !filterRef.value.contains(event.target)) {
+      filter.value = false
+   }
+}
+
+onMounted(() => {
+   fetchCategories()
+   document.addEventListener('click', handleClickOutside)
+})
+onUnmounted(() => document.removeEventListener('click', handleClickOutside))
 
 // Layout Cashier
 definePageMeta({

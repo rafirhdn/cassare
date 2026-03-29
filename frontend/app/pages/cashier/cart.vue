@@ -1,33 +1,100 @@
 <template>
    <div class="font-mono">
-      <!-- Header -->
-      <div class="w-full border-b border-dark-theme-800">
-         <div class="px-4 py-4.5">
-            <div class="flex flex-row">
-               <!-- Title -->
-               <div>
-                  <span class="text-dark-theme-50 text-base tracking-tight flex flex-row gap-2">
-                     <div class="pr-2 border-r border-dark-theme-800">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                           <rect width="24" height="24" fill="none" />
-                           <g fill="none" stroke="currentColor" stroke-width="1.5">
-                              <path d="m19.5 9.5l-.71-2.605c-.274-1.005-.411-1.507-.692-1.886A2.5 2.5 0 0 0 17 4.172C16.56 4 16.04 4 15 4M4.5 9.5l.71-2.605c.274-1.005.411-1.507.692-1.886A2.5 2.5 0 0 1 7 4.172C7.44 4 7.96 4 9 4" />
-                              <path d="M9 4a1 1 0 0 1 1-1h4a1 1 0 1 1 0 2h-4a1 1 0 0 1-1-1Z" />
-                              <path stroke-linecap="round" stroke-linejoin="round" d="M8 13v4m8-4v4m-4-4v4" />
-                              <path stroke-linecap="round" d="M3.864 16.455c.546 2.183.819 3.274 1.632 3.91C6.31 21 7.435 21 9.685 21h4.63c2.25 0 3.375 0 4.19-.635c.813-.636 1.086-1.727 1.631-3.91c.858-3.432 1.287-5.147.387-6.301C19.622 9 17.853 9 14.316 9H9.685c-3.538 0-5.306 0-6.207 1.154c-.529.677-.6 1.548-.394 2.846" />
-                           </g>
-                        </svg>
-                     </div>
-                     Keranjang
-                  </span>
+      <!-- Warpper -->
+      <div class="w-full border-b border-dark-theme-800 px-4 py-4 flex flex-row">
+         <!-- Title -->
+         <div class="flex flex-row w-full items-center justify-between">
+            <span class="text-dark-theme-50 text-base tracking-tight flex flex-row gap-2">
+               <div class="pr-2 border-r border-dark-theme-800">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                     <rect width="24" height="24" fill="none" />
+                     <g fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="m19.5 9.5l-.71-2.605c-.274-1.005-.411-1.507-.692-1.886A2.5 2.5 0 0 0 17 4.172C16.56 4 16.04 4 15 4M4.5 9.5l.71-2.605c.274-1.005.411-1.507.692-1.886A2.5 2.5 0 0 1 7 4.172C7.44 4 7.96 4 9 4" />
+                        <path d="M9 4a1 1 0 0 1 1-1h4a1 1 0 1 1 0 2h-4a1 1 0 0 1-1-1Z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 13v4m8-4v4m-4-4v4" />
+                        <path stroke-linecap="round" d="M3.864 16.455c.546 2.183.819 3.274 1.632 3.91C6.31 21 7.435 21 9.685 21h4.63c2.25 0 3.375 0 4.19-.635c.813-.636 1.086-1.727 1.631-3.91c.858-3.432 1.287-5.147.387-6.301C19.622 9 17.853 9 14.316 9H9.685c-3.538 0-5.306 0-6.207 1.154c-.529.677-.6 1.548-.394 2.846" />
+                     </g>
+                  </svg>
                </div>
+               Keranjang
+            </span>
+
+            <!-- Button -->
+            <button class="bg-dark-theme-50 rounded-sm tracking-tight font-normal flex flex-row gap-2 py-1 px-4 hover:bg-dark-theme-400 text-dark-theme-950 hover:cursor-pointer text-sm items-center">
+               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                  <rect width="24" height="24" fill="none" />
+                  <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5">
+                     <path stroke-linejoin="round" d="M2 5.5L3.214 7L7.5 3M2 12.5L3.214 14L7.5 10M2 19.5L3.214 21L7.5 17" />
+                     <path d="M22 12h-5m-5 0h1.5M12 19h5m3.5 0H22m0-14H12" />
+                  </g>
+               </svg>
+               Tinjau
+            </button>
+         </div>
+      </div>
+
+      <!-- Wrapper -->
+      <div class="py-4 px-4 flex flex-row justify-between">
+         <!-- Button -->
+         <div ref="filterRef" class="w-30 text-dark-theme-50 relative">
+            <button @click="filter = !filter" class="w-full flex flex-row justify-base items-center gap-4 bg-dark-theme-900 border border-dark-theme-800 px-4 py-2 rounded-sm hover:bg-dark-theme-800 hover:cursor-pointer">
+               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
+                  <rect width="24" height="24" fill="none" />
+                  <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5" d="M20.058 9.723c.948-.534 1.423-.801 1.682-1.232c.26-.43.26-.949.26-1.987v-.69c0-1.326 0-1.99-.44-2.402C21.122 3 20.415 3 19 3H5c-1.414 0-2.121 0-2.56.412S2 4.488 2 5.815v.69c0 1.037 0 1.556.26 1.986s.733.698 1.682 1.232l2.913 1.64c.636.358.955.537 1.183.735c.474.411.766.895.898 1.49c.064.284.064.618.064 1.285v2.67c0 .909 0 1.364.252 1.718c.252.355.7.53 1.594.88c1.879.734 2.818 1.101 3.486.683S15 19.452 15 17.542v-2.67c0-.666 0-1 .064-1.285a2.68 2.68 0 0 1 .899-1.49" />
+               </svg>
+               <span class="text-base tracking-tight">Filter</span>
+            </button>
+
+            <div v-if="filter" class="w-30 absolute top-12 left-0 bg-dark-theme-900 border border-dark-theme-800 rounded-sm overflow-hidden z-10">
+               <button class="w-full flex flex-row justify-base items-center gap-4 px-4 py-2 text-base tracking-tight hover:bg-dark-theme-800 hover:cursor-pointer">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
+                     <rect width="24" height="24" fill="none" />
+                     <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m19 11l-7 6l-1.75-1.5M5 11l2.333 2M5 7l7 6l1.75-1.5M19 7l-2.333 2" />
+                  </svg>
+                  A - Z
+               </button>
+               <button class="w-full flex flex-row justify-base items-center gap-4 px-4 py-2 text-base tracking-tight hover:bg-dark-theme-800 hover:cursor-pointer">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
+                     <rect width="24" height="24" fill="none" />
+                     <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m19 13l-7-6l-1.75 1.5M5 13l2.333-2M5 17l7-6l1.75 1.5M19 17l-2.333-2" />
+                  </svg>
+                  Z - A
+               </button>
             </div>
+         </div>
+
+         <!-- Input Box -->
+         <div class="text-dark-theme-50 relative">
+            <div class="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
+                  <rect width="24" height="24" fill="none" />
+                  <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5" d="m20 20l2 2M6.75 3.27a9.5 9.5 0 1 1-3.48 3.48" />
+               </svg>
+            </div>
+            <input placeholder="Cari" type="text" class="bg-dark-theme-900 border font-normal tracking-tight border-dark-theme-800 placeholder:text-dark-theme-400 px-10 py-2 rounded-sm focus:outline-dark-theme-100 focus:outline-2 w-2xs" />
          </div>
       </div>
    </div>
 </template>
 
 <script setup>
+// Import
+import { ref, onMounted, onUnmounted } from 'vue'
+
+// Variable
+const filter = ref(false)
+const filterRef = ref(null)
+
+// Click Outside Function
+const handleClickOutside = (event) => {
+   if (filterRef.value && !filterRef.value.contains(event.target)) {
+      filter.value = false
+   }
+}
+
+onMounted(() => document.addEventListener('click', handleClickOutside))
+onUnmounted(() => document.removeEventListener('click', handleClickOutside))
+
 // Layout Kasir
 definePageMeta({
    layout: 'cashier',

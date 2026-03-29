@@ -1,6 +1,6 @@
 <template>
    <div class="font-mono">
-      <!-- Header -->
+      <!-- Wrapper -->
       <div class="w-full border-b border-dark-theme-800 px-4 py-4 flex flex-row">
          <!-- Title -->
          <div class="flex flex-row w-full items-center justify-between">
@@ -17,58 +17,48 @@
                Produk
             </span>
 
-            <!-- Add Button -->
-            <button class="bg-dark-theme-50 rounded-sm flex flex-row gap-2 py-1 px-4 hover:bg-dark-theme-400 text-dark-theme-950 hover:cursor-pointer text-sm items-center">
+            <!-- Button -->
+            <button class="bg-dark-theme-50 rounded-sm tracking-tight font-normal flex flex-row gap-2 py-1 px-4 hover:bg-dark-theme-400 text-dark-theme-950 hover:cursor-pointer text-sm items-center">
                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                   <rect width="24" height="24" fill="none" />
-                  <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5" d="M15 12h-3m0 0H9m3 0V9m0 3v3M7 3.338A9.95 9.95 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5" />
+                  <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5" d="M15 12h-3m0 0H9m3 0V9m0 3v3m10-3c0 4.714 0 7.071-1.465 8.535C19.072 22 16.714 22 12 22s-7.071 0-8.536-1.465C2 19.072 2 16.714 2 12s0-7.071 1.464-8.536C4.93 2 7.286 2 12 2s7.071 0 8.535 1.464c.974.974 1.3 2.343 1.41 4.536" />
                </svg>
-               Tambah
+               Buat
             </button>
          </div>
       </div>
 
-      <!-- Feature -->
-      <div class="py-4 px-3.5 flex flex-row justify-between">
-         <!-- Filter -->
-         <div class="flex flex-row gap-2 items-center justify-center">
-            <!-- Filter Sort -->
-            <div class="w-35 text-dark-theme-50 relative">
-               <button @click="filterSort = !filterSort" class="w-35 flex flex-row justify-center items-center gap-2 bg-dark-theme-900 border border-dark-theme-800 px-2 py-2 rounded-sm hover:bg-dark-theme-800 hover:cursor-pointer">
+      <!-- Wrapper -->
+      <div class="py-4 px-4 flex flex-row justify-between">
+         <!-- Button -->
+         <div ref="filterRef" class="w-30 text-dark-theme-50 relative">
+            <button @click="filter = !filter" class="w-full flex flex-row justify-base items-center gap-4 bg-dark-theme-900 border border-dark-theme-800 px-4 py-2 rounded-sm hover:bg-dark-theme-800 hover:cursor-pointer">
+               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
+                  <rect width="24" height="24" fill="none" />
+                  <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5" d="M20.058 9.723c.948-.534 1.423-.801 1.682-1.232c.26-.43.26-.949.26-1.987v-.69c0-1.326 0-1.99-.44-2.402C21.122 3 20.415 3 19 3H5c-1.414 0-2.121 0-2.56.412S2 4.488 2 5.815v.69c0 1.037 0 1.556.26 1.986s.733.698 1.682 1.232l2.913 1.64c.636.358.955.537 1.183.735c.474.411.766.895.898 1.49c.064.284.064.618.064 1.285v2.67c0 .909 0 1.364.252 1.718c.252.355.7.53 1.594.88c1.879.734 2.818 1.101 3.486.683S15 19.452 15 17.542v-2.67c0-.666 0-1 .064-1.285a2.68 2.68 0 0 1 .899-1.49" />
+               </svg>
+               <span class="text-base tracking-tight">Filter</span>
+            </button>
+
+            <div v-if="filter" class="w-30 absolute top-12 left-0 bg-dark-theme-900 border border-dark-theme-800 rounded-sm overflow-hidden z-10">
+               <button class="w-full flex flex-row justify-base items-center gap-4 px-4 py-2 text-base tracking-tight hover:bg-dark-theme-800 hover:cursor-pointer">
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
                      <rect width="24" height="24" fill="none" />
-                     <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5" d="M20.058 9.723c.948-.534 1.423-.801 1.682-1.232c.26-.43.26-.949.26-1.987v-.69c0-1.326 0-1.99-.44-2.402C21.122 3 20.415 3 19 3H5c-1.414 0-2.121 0-2.56.412S2 4.488 2 5.815v.69c0 1.037 0 1.556.26 1.986s.733.698 1.682 1.232l2.913 1.64c.636.358.955.537 1.183.735c.474.411.766.895.898 1.49c.064.284.064.618.064 1.285v2.67c0 .909 0 1.364.252 1.718c.252.355.7.53 1.594.88c1.879.734 2.818 1.101 3.486.683S15 19.452 15 17.542v-2.67c0-.666 0-1 .064-1.285a2.68 2.68 0 0 1 .899-1.49" />
+                     <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m19 11l-7 6l-1.75-1.5M5 11l2.333 2M5 7l7 6l1.75-1.5M19 7l-2.333 2" />
                   </svg>
-                  <span class="text-base tracking-tight">Urutkan</span>
+                  A - Z
                </button>
-
-               <div v-if="filterSort" class="w-35 absolute top-12 left-0 bg-dark-theme-900 border border-dark-theme-800 rounded-sm overflow-hidden z-10">
-                  <button class="w-full flex flex-row justify-center items-center px-2 py-2 text-base tracking-tight hover:bg-dark-theme-800 hover:cursor-pointer">A - Z</button>
-                  <button class="w-full flex flex-row justify-center items-center px-2 py-2 text-base tracking-tight hover:bg-dark-theme-800 hover:cursor-pointer">Z - A</button>
-               </div>
-            </div>
-
-            <!-- Filter Category -->
-            <div class="w-35 text-dark-theme-50 relative">
-               <button @click="filterCategory = !filterCategory" class="w-35 flex flex-row justify-center items-center gap-2 bg-dark-theme-900 border border-dark-theme-800 px-2 py-2 rounded-sm hover:bg-dark-theme-800 hover:cursor-pointer">
+               <button class="w-full flex flex-row justify-base items-center gap-4 px-4 py-2 text-base tracking-tight hover:bg-dark-theme-800 hover:cursor-pointer">
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
                      <rect width="24" height="24" fill="none" />
-                     <g fill="none">
-                        <path stroke="currentColor" stroke-width="1.5" d="M12 20.283A6 6 0 1 0 17.5 10" />
-                        <path stroke="currentColor" stroke-linecap="round" stroke-width="1.5" d="M9 2.803A6 6 0 1 1 6.341 6" />
-                        <path fill="currentColor" d="M8 22v-.75zm-6-6h-.75zm.153 3.375a.75.75 0 1 0 1.299-.75zm4.097 1.576a.75.75 0 0 0-.5 1.415zm7-4.951c0 2.9-2.35 5.25-5.25 5.25v1.5A6.75 6.75 0 0 0 14.75 16zm-10.5 0a5.25 5.25 0 0 1 3.937-5.085l-.374-1.452A6.75 6.75 0 0 0 1.25 16zm10.156-1.874c.222.58.344 1.212.344 1.874h1.5c0-.848-.157-1.66-.443-2.41zm-9.454 4.498A5.2 5.2 0 0 1 2.75 16h-1.5c0 1.228.329 2.382.903 3.375zM8 21.25a5.2 5.2 0 0 1-1.75-.299l-.5 1.415A6.7 6.7 0 0 0 8 22.75z" />
-                     </g>
+                     <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m19 13l-7-6l-1.75 1.5M5 13l2.333-2M5 17l7-6l1.75 1.5M19 17l-2.333-2" />
                   </svg>
-                  <span class="text-base tracking-tight">Kategori</span>
+                  Z - A
                </button>
-
-               <div v-if="filterCategory" class="w-35 absolute top-12 left-0 bg-dark-theme-900 border border-dark-theme-800 rounded-sm overflow-hidden z-10">
-                  <button class="w-full flex flex-row justify-center items-center px-2 py-2 text-base tracking-tight hover:bg-dark-theme-800 hover:cursor-pointer"></button>
-               </div>
             </div>
          </div>
 
-         <!-- Search Bar -->
+         <!-- Input Box -->
          <div class="text-dark-theme-50 relative">
             <div class="absolute inset-y-0 left-3 flex items-center pointer-events-none">
                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
@@ -76,14 +66,17 @@
                   <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5" d="m20 20l2 2M6.75 3.27a9.5 9.5 0 1 1-3.48 3.48" />
                </svg>
             </div>
-            <input placeholder="Cari" type="text" class="bg-dark-theme-900 border border-dark-theme-800 placeholder:text-dark-theme-400 px-10 py-2 rounded-sm focus:outline-dark-theme-100 focus:outline-2 w-2xs" />
+            <input placeholder="Cari" type="text" class="bg-dark-theme-900 border font-normal tracking-tight border-dark-theme-800 placeholder:text-dark-theme-400 px-10 py-2 rounded-sm focus:outline-dark-theme-100 focus:outline-2 w-2xs" />
          </div>
       </div>
 
-      <!-- Content -->
-      <div></div>
+      <!-- Wrapper -->
+      <div class="px-4 py-1 grid grid-cols-3 gap-4">
+         <!-- Card -->
+         <div></div>
+      </div>
 
-      <!-- Pop Up -->
+      <!-- Component -->
       <AddProduct v-model="addProduct" />
       <DeleteProduct v-model="deleteProduct" />
       <EditProduct v-model="editProduct" />
@@ -92,16 +85,24 @@
 
 <script setup>
 // Import
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 
 // Variable
-const filterSort = ref(false)
-const filterCategory = ref(false)
-
-// Pop Up
+const filter = ref(false)
+const filterRef = ref(null)
 const addProduct = ref(false)
 const deleteProduct = ref(false)
 const editProduct = ref(false)
+
+// Click Outside Function
+const handleClickOutside = (event) => {
+   if (filterRef.value && !filterRef.value.contains(event.target)) {
+      filter.value = false
+   }
+}
+
+onMounted(() => document.addEventListener('click', handleClickOutside))
+onUnmounted(() => document.removeEventListener('click', handleClickOutside))
 
 // Layout Cashier
 definePageMeta({
