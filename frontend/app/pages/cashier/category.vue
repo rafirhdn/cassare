@@ -36,23 +36,19 @@
 
       <!-- Feature -->
       <div class="py-4 px-3.5 flex flex-row justify-between">
-         <!-- Filter Button -->
-         <div class="w-30 text-dark-theme-50 relative">
-            <button @click="filter = !filter" class="w-30 flex flex-row justify-center items-center gap-2 bg-dark-theme-900/95 border border-dark-theme-800 px-4 py-2 rounded-lg hover:bg-dark-theme-800 hover:cursor-pointer">
-               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+         <!-- Filter Sort -->
+         <div class="w-35 text-dark-theme-50 relative">
+            <button @click="filter = !filter" class="w-full flex flex-row justify-center items-center gap-2 bg-dark-theme-900/95 border border-dark-theme-800 px-2 py-2 rounded-lg hover:bg-dark-theme-800 hover:cursor-pointer">
+               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
                   <rect width="24" height="24" fill="none" />
-                  <g fill="none">
-                     <path stroke="currentColor" stroke-width="1.5" d="M12 20.283A6 6 0 1 0 17.5 10" />
-                     <path stroke="currentColor" stroke-linecap="round" stroke-width="1.5" d="M9 2.803A6 6 0 1 1 6.341 6" />
-                     <path fill="currentColor" d="M8 22v-.75zm-6-6h-.75zm.153 3.375a.75.75 0 1 0 1.299-.75zm4.097 1.576a.75.75 0 0 0-.5 1.415zm7-4.951c0 2.9-2.35 5.25-5.25 5.25v1.5A6.75 6.75 0 0 0 14.75 16zm-10.5 0a5.25 5.25 0 0 1 3.937-5.085l-.374-1.452A6.75 6.75 0 0 0 1.25 16zm10.156-1.874c.222.58.344 1.212.344 1.874h1.5c0-.848-.157-1.66-.443-2.41zm-9.454 4.498A5.2 5.2 0 0 1 2.75 16h-1.5c0 1.228.329 2.382.903 3.375zM8 21.25a5.2 5.2 0 0 1-1.75-.299l-.5 1.415A6.7 6.7 0 0 0 8 22.75z" />
-                  </g>
+                  <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5" d="M20.058 9.723c.948-.534 1.423-.801 1.682-1.232c.26-.43.26-.949.26-1.987v-.69c0-1.326 0-1.99-.44-2.402C21.122 3 20.415 3 19 3H5c-1.414 0-2.121 0-2.56.412S2 4.488 2 5.815v.69c0 1.037 0 1.556.26 1.986s.733.698 1.682 1.232l2.913 1.64c.636.358.955.537 1.183.735c.474.411.766.895.898 1.49c.064.284.064.618.064 1.285v2.67c0 .909 0 1.364.252 1.718c.252.355.7.53 1.594.88c1.879.734 2.818 1.101 3.486.683S15 19.452 15 17.542v-2.67c0-.666 0-1 .064-1.285a2.68 2.68 0 0 1 .899-1.49" />
                </svg>
-               <span class="text-base tracking-tight">Filter</span>
+               <span class="text-base tracking-tight">Urutkan</span>
             </button>
 
-            <div v-if="filter" class="absolute top-12 left-0 w-30 bg-dark-theme-900/95 border border-dark-theme-800 rounded-lg overflow-hidden z-10">
-               <button class="w-full flex flex-row justify-center items-center px-4 py-2 text-base tracking-tight hover:bg-dark-theme-800 hover:cursor-pointer">A - Z</button>
-               <button class="w-full flex flex-row justify-center items-center px-4 py-2 text-base tracking-tight hover:bg-dark-theme-800 hover:cursor-pointer">Z - A</button>
+            <div v-if="filter" class="w-35 absolute top-12 left-0 bg-dark-theme-900/95 border border-dark-theme-800 rounded-lg overflow-hidden z-10">
+               <button class="w-full flex flex-row justify-center items-center px-2 py-2 text-base tracking-tight hover:bg-dark-theme-800 hover:cursor-pointer">A - Z</button>
+               <button class="w-full flex flex-row justify-center items-center px-2 py-2 text-base tracking-tight hover:bg-dark-theme-800 hover:cursor-pointer">Z - A</button>
             </div>
          </div>
 
