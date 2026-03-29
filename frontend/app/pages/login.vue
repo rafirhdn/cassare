@@ -29,7 +29,7 @@
                   <span class="text-dark-theme-50 text-base font-medium tracking-tight">Password</span>
 
                   <!-- Link Forgot Password -->
-                  <NuxtLink to="/forgotPassword" class="text-dark-theme-50 text-base font-medium tracking-tight hover:underline-offset-2 hover:underline decoration-2">Lupa password?</NuxtLink>
+                  <NuxtLink to="/enterEmail" class="text-dark-theme-50 text-base font-medium tracking-tight hover:underline-offset-2 hover:underline decoration-2">Lupa password?</NuxtLink>
                </div>
 
                <!-- Input Box Password -->
