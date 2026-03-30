@@ -2,7 +2,6 @@
    <div class="font-mono">
       <!-- Wrapper -->
       <div class="w-full border-b border-dark-theme-800 px-4 py-4 flex flex-row">
-         <!-- Title -->
          <div class="flex flex-row w-full items-center justify-between">
             <span class="text-dark-theme-50 text-base tracking-tight flex flex-row gap-2">
                <div class="pr-2 border-r border-dark-theme-800">
@@ -17,8 +16,7 @@
                Kasir
             </span>
 
-            <!-- Button -->
-            <button class="bg-dark-theme-50 rounded-sm tracking-tight font-normal flex flex-row gap-2 py-1 px-4 hover:bg-dark-theme-400 text-dark-theme-950 hover:cursor-pointer text-sm items-center">
+            <button @click="addCashier = true" class="bg-dark-theme-50 rounded-sm tracking-tight font-normal flex flex-row gap-2 py-1 px-4 hover:bg-dark-theme-400 text-dark-theme-950 hover:cursor-pointer text-sm items-center">
                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                   <rect width="24" height="24" fill="none" />
                   <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5" d="M15 12h-3m0 0H9m3 0V9m0 3v3m10-3c0 4.714 0 7.071-1.465 8.535C19.072 22 16.714 22 12 22s-7.071 0-8.536-1.465C2 19.072 2 16.714 2 12s0-7.071 1.464-8.536C4.93 2 7.286 2 12 2s7.071 0 8.535 1.464c.974.974 1.3 2.343 1.41 4.536" />
@@ -30,7 +28,6 @@
 
       <!-- Wrapper -->
       <div class="py-4 px-4 flex flex-row justify-between">
-         <!-- Button -->
          <div ref="filterRef" class="w-30 text-dark-theme-50 relative">
             <button @click="filter = !filter" class="w-full flex flex-row justify-base items-center gap-4 bg-dark-theme-900 border border-dark-theme-800 px-4 py-2 rounded-sm hover:bg-dark-theme-800 hover:cursor-pointer">
                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
@@ -58,7 +55,6 @@
             </div>
          </div>
 
-         <!-- Input Box -->
          <div class="text-dark-theme-50 relative">
             <div class="absolute inset-y-0 left-3 flex items-center pointer-events-none">
                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
@@ -71,18 +67,98 @@
       </div>
 
       <!-- Wrapper -->
-      <div></div>
+      <div class="py-2 px-4 w-full">
+         <div class="w-full rounded-sm overflow-hidden border border-dark-theme-800">
+            <table class="w-full table-auto border-collapse">
+               <thead class="text-dark-theme-50 bg-dark-theme-900">
+                  <tr>
+                     <td class="text-base tracking-tight font-medium px-4 py-2 border-b border-r border-dark-theme-800">No.</td>
+                     <td class="text-base tracking-tight font-medium px-4 py-2 border-b border-r border-dark-theme-800">Nama</td>
+                     <td class="text-base tracking-tight font-medium px-4 py-2 border-b border-r border-dark-theme-800">Email</td>
+                     <td class="text-base tracking-tight font-medium px-4 py-2 border-b border-r border-dark-theme-800">Password</td>
+                     <td class="text-base tracking-tight font-medium px-4 py-2 border-b border-r border-dark-theme-800">Kontrol</td>
+                     <td class="text-base tracking-tight font-medium px-4 py-2 border-b border-r border-dark-theme-800">Status</td>
+                     <td class="text-base tracking-tight font-medium px-4 py-2 border-b border-r border-dark-theme-800">Aksi</td>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr v-for="(item, index) in cashiers" :key="item.id_admin">
+                     <td class="border-r border-dark-theme-800 px-4 py-3">
+                        <span class="text-dark-theme-200 text-sm tracking-tight">{{ index + 1 }}.</span>
+                     </td>
+                     <td class="border-r border-dark-theme-800 px-4 py-3">
+                        <span class="text-dark-theme-200 text-sm tracking-tight">{{ item.name }}</span>
+                     </td>
+                     <td class="border-r border-dark-theme-800 px-4 py-3">
+                        <span class="text-dark-theme-200 text-sm tracking-tight">{{ item.email }}</span>
+                     </td>
+                     <td class="border-r border-dark-theme-800 px-4 py-3">
+                        <span class="text-dark-theme-200 text-sm tracking-tight">{{ item.password }}</span>
+                     </td>
+                     <td class="px-4 py-3 border-r border-dark-theme-800">
+                        <button @click="handleUnblock(item)" :disabled="item.status !== 'Blokir'" :class="item.status === 'Blokir' ? 'cursor-pointer hover:bg-dark-theme-400' : 'cursor-not-allowed opacity-50'" class="text-dark-theme-950 text-sm tracking-tight bg-dark-theme-50 px-3 py-1 rounded-sm">Aktifkan</button>
+                     </td>
+                     <td class="border-r border-dark-theme-800 px-4 py-3">
+                        <div class="bg-dark-theme-800/50 py-1 px-4 text-center rounded-4xl w-max flex flex-row items-center gap-3">
+                           <div :class="item.status === 'Aktif' ? 'bg-green-400' : 'bg-red-400'" class="w-2 h-2 rounded-full"></div>
+                           <span :class="item.status === 'Aktif' ? 'text-green-400' : 'text-red-400'" class="text-dark-theme-200 text-sm tracking-tight">{{ item.status }}</span>
+                        </div>
+                     </td>
+                     <td class="px-4 py-3">
+                        <div class="flex flex-row gap-2">
+                           <button @click="openEdit(item)" class="text-dark-theme-950 text-sm tracking-tight bg-dark-theme-50 hover:bg-dark-theme-400 px-3 py-1 rounded-sm cursor-pointer">Edit</button>
+                           <button
+                              @click="
+                                 deleteCashier = true;
+                                 selectedId = item.id_admin
+                              "
+                              class="text-dark-theme-50 text-sm tracking-tight bg-dark-theme-800 hover:bg-dark-theme-600 cursor-pointer px-3 py-1 rounded-sm">
+                              Hapus
+                           </button>
+                        </div>
+                     </td>
+                  </tr>
+               </tbody>
+            </table>
+         </div>
+      </div>
+
+      <!-- Component -->
+      <AddCashier v-model="addCashier" @added="fetchCashiers" />
+      <EditCashier v-model="editCashier" :id-cashier="selectedCashier?.id_admin" :cashier-name="selectedCashier?.name" :cashier-email="selectedCashier?.email" :cashier-password="selectedCashier?.password" @updated="fetchCashiers" />
+      <DeleteCashier v-model="deleteCashier" :id-cashier="selectedId" @deleted="fetchCashiers" />
    </div>
 </template>
 
 <script setup>
 // Import
+import { useAuthenticationStore } from '~/stores/authentication'
 import { useCashierStore } from '~/stores/cashier'
 import { ref, onMounted, onUnmounted } from 'vue'
 
 // Variable
+const cashier = useCashierStore()
+const authentication = useAuthenticationStore()
+const cashiers = ref([])
+const selectedId = ref(null)
+const selectedCashier = ref(null)
 const filter = ref(false)
 const filterRef = ref(null)
+const addCashier = ref(false)
+const editCashier = ref(false)
+const deleteCashier = ref(false)
+
+// Open Edit Form Function
+const openEdit = (item) => {
+   selectedCashier.value = item
+   editCashier.value = true
+}
+
+// Fetch Cashier Data Function
+const fetchCashiers = async () => {
+   const data = await cashier.index()
+   cashiers.value = data.data
+}
 
 // Click Outside Function
 const handleClickOutside = (event) => {
@@ -91,7 +167,22 @@ const handleClickOutside = (event) => {
    }
 }
 
-onMounted(() => document.addEventListener('click', handleClickOutside))
+// Unblock Cashier Function
+const handleUnblock = async (item) => {
+   if (item.status !== 'Blokir') return
+   const data = await authentication.unblock(item.id_admin)
+
+   if (data?.success) {
+      window.location.reload()
+   } else {
+      console.error(data?.message || 'Gagal mengaktifkan akun kasir!')
+   }
+}
+
+onMounted(() => {
+   fetchCashiers()
+   document.addEventListener('click', handleClickOutside)
+})
 onUnmounted(() => document.removeEventListener('click', handleClickOutside))
 
 // Layout Admin

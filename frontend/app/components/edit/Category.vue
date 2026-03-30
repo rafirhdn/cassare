@@ -2,7 +2,7 @@
    <div v-if="editCategory" class="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm">
       <div class="flex flex-col items-center justify-center bg-dark-theme-950 max-w-xl w-full p-6 rounded-sm border border-dark-theme-800">
          <!-- Form -->
-         <div class="flex flex-col items-baseline justify-center gap-4 w-full">
+         <form @submit.prevent="handleUpdate" class="flex flex-col items-baseline justify-center gap-4 w-full">
             <!-- Big Title -->
             <div class="flex flex-col gap-2 w-full">
                <div class="text-dark-theme-50 flex flex-row items-center justify-between">
@@ -54,7 +54,7 @@
             <!-- Wrapper -->
             <div class="flex flex-row w-full">
                <!-- Button -->
-               <button @click="handleUpdate" class="text-dark-theme-950 bg-dark-theme-50 p-2 rounded-sm w-full text-md tracking-tight hover:bg-dark-theme-400 hover:cursor-pointer">
+               <button type="submit" class="text-dark-theme-950 bg-dark-theme-50 p-2 rounded-sm w-full text-md tracking-tight hover:bg-dark-theme-400 hover:cursor-pointer">
                   {{ loading ? 'Memperbarui...' : 'Perbarui' }}
                </button>
             </div>
@@ -63,7 +63,7 @@
             <div v-if="error" class="w-full text-dark-theme-50 bg-red-600 text-base flex flex-row items-baseline justify-baseline px-4 py-2 rounded-sm tracking-tight">
                {{ error }}
             </div>
-         </div>
+        </form>
       </div>
    </div>
 </template>

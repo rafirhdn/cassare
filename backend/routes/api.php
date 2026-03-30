@@ -49,4 +49,18 @@ Route::middleware('auth:sanctum')->group(function () {
         // Destroy
         Route::post('/destroy', [ProductController::class, 'destroy']);
     });
+
+    // Admin
+    Route::prefix('admin')->group(function () {
+        // Index
+        Route::get('/index', [AdminController::class, 'index']);
+        // Store
+        Route::post('/store', [AdminController::class, 'store']);
+        // Show
+        Route::post('/show', [AdminController::class, 'show']);
+        // Update
+        Route::post('/update', [AdminController::class, 'update']);
+        // Destroy
+        Route::post('/destroy', [AdminController::class, 'destroy']);
+    });
 });

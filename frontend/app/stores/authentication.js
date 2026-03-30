@@ -15,6 +15,11 @@ export const useAuthenticationStore = defineStore('authentication', {
 
    // Actions (Function To Change Data)
    actions: {
+      // Get Token
+      getToken() {
+         return localStorage.getItem('token')
+      },
+
       // Login
       async login(email, password) {
          try {
@@ -150,7 +155,31 @@ export const useAuthenticationStore = defineStore('authentication', {
       },
 
       // Unblock
-      async unblock() {},
+      async unblock(id_admin) {
+         const config = useRuntimeConfig()
+         try {
+            const response = await fetch(`${config.public.apiKey}/unblock`, {
+               method: 'POST',
+               headers: {
+                  Authorization: `Bearer ${this.getToken()}`,
+                  'Content-Type': 'application/json',
+                  Accept: 'application/json',
+               },
+               credentials: 'include',
+               body: JSON.stringify({ id_admin }),
+            })
+            const data = await response.json()
+            return data
+         } catch (error) {
+            console.error('Gagal mengaktifkan akun kasir:', error)
+         }
+      },
+
+      // Profile
+      async profile() {},
+
+      // Change Profile
+      async changeProfile() {},
 
       // Redirect
       redirect() {

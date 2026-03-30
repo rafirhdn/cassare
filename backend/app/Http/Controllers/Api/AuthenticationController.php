@@ -281,7 +281,32 @@ class AuthenticationController extends Controller
     }
 
     // Unblock
-    public function unblock() {}
+    public function unblock(Request $request)
+    {
+        $admin = Admin::find($request->id_admin);
+
+        if (!$admin) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Kasir tidak ditemukan!'
+            ], 404);
+        }
+
+        if ($admin->status !== 'Blokir') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Akun kasir tidak dalam status blokir!'
+            ], 400);
+        }
+
+        $admin->status = 'Aktif';
+        $admin->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Akun kasir berhasil diaktifkan!'
+        ], 200);
+    }
 
     // Profile
     public function profile() {}
