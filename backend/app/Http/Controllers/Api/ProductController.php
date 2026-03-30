@@ -13,7 +13,9 @@ class ProductController extends Controller
     // Index
     public function index(Request $request)
     {
-        $product = Product::where('id_admin', $request->user()->id_admin)->get();
+        $product = Product::with('category')
+            ->where('id_admin', $request->user()->id_admin)
+            ->get();
 
         return response()->json([
             'success' => true,

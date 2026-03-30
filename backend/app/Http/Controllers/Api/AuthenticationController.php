@@ -253,7 +253,7 @@ class AuthenticationController extends Controller
         if (!$admin) {
             return null;
         }
-        if ($admin->level_admin !== "Kasir") {
+        if ($admin->level !== "Kasir") {
             return null;
         }
 

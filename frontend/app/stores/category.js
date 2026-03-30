@@ -30,9 +30,11 @@ export const useCategoryStore = defineStore('category', {
                credentials: 'include',
             })
             const data = await response.json()
+            console.log('Category API response:', data)
             return data
          } catch (error) {
             console.error('Gagal mengambil data kategori:', error)
+            return { success: false, data: [] }
          }
       },
 

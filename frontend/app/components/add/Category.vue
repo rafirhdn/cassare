@@ -76,6 +76,7 @@ import { ref } from 'vue'
 // Variable
 const category = useCategoryStore()
 const addCategory = defineModel({ type: Boolean, default: false })
+const emit = defineEmits(['added'])
 const name = ref('')
 const photo = ref('')
 const photoFile = ref(null)
@@ -102,6 +103,7 @@ const handleAddCategory = async () => {
    const data = await category.store()
 
    if (data.success) {
+      emit('added')
       close()
    } else {
       if (data.errors) {

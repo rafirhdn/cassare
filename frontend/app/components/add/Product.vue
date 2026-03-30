@@ -206,20 +206,20 @@
                            <button
                               type="button"
                               @click="
-                                 type = 'Pra-pesan';
-                                 ddType = false
-                              "
-                              class="w-full flex flex-row items-center gap-3 px-4 py-2 text-base tracking-tight hover:bg-dark-theme-800 hover:cursor-pointer">
-                              Pra-pesan
-                           </button>
-                           <button
-                              type="button"
-                              @click="
                                  type = 'Siap-pesan';
                                  ddType = false
                               "
                               class="w-full flex flex-row items-center gap-3 px-4 py-2 text-base tracking-tight hover:bg-dark-theme-800 hover:cursor-pointer">
                               Siap-pesan
+                           </button>
+                           <button
+                              type="button"
+                              @click="
+                                 type = 'Pra-pesan';
+                                 ddType = false
+                              "
+                              class="w-full flex flex-row items-center gap-3 px-4 py-2 text-base tracking-tight hover:bg-dark-theme-800 hover:cursor-pointer">
+                              Pra-pesan
                            </button>
                         </div>
                      </div>
@@ -281,7 +281,8 @@ const error = ref('')
 // Fetch Categories Function
 const fetchCategories = async () => {
    const data = await categoryStore.index()
-   if (data.success) {
+   console.log('fetchCategories result:', data)
+   if (data?.success) {
       categories.value = data.data
    }
 }
@@ -346,7 +347,7 @@ const close = () => {
    status.value = ''
    estimate.value = ''
    selectedCategory.value = ''
-   categories.value = []
+   error.value = ''
    ddType.value = false
    ddStatus.value = false
    ddEstimate.value = false

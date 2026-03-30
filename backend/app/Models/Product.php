@@ -15,4 +15,9 @@ class Product extends Model
     public $timestamps = true; // Timestamps
 
     protected $fillable = ['id_product', 'name', 'stock', 'price', 'photo', 'barcode', 'description', 'type', 'status', 'estimate', 'id_category', 'id_admin']; // Field Table
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'id_category', 'id_category');
+    }
 }

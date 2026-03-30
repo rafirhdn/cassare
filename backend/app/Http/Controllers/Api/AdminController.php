@@ -34,7 +34,7 @@ class AdminController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name'     => 'required|string|max:50',
-            'email'    => 'required|email|max:100|unique:admin',
+            'email'    => 'required|email|max:100|unique:admin,email',
             'password' => 'required|string|min:8',
         ], [
             'name.required'     => 'Nama kasir wajib diisi!',
@@ -96,9 +96,8 @@ class AdminController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name'     => 'required|string|max:50',
-            'email'    => 'required|email|max:100|unique:admins,email,' . $request->id_admin . ',id_admin',
+            'email'    => 'required|email|max:100|unique:admin,email,' . $request->id_admin . ',id_admin',
             'password' => 'nullable|string|min:8',
-            'status'   => 'required|in:active,inactive',
         ], [
             'name.required'  => 'Nama kasir wajib diisi!',
             'name.max'       => 'Nama kasir melebihi batas!',
@@ -106,8 +105,6 @@ class AdminController extends Controller
             'email.email'    => 'Format email tidak valid!',
             'email.unique'   => 'Email kasir sudah digunakan!',
             'password.min'   => 'Password minimal 8 karakter!',
-            'status.required' => 'Status kasir wajib diisi!',
-            'status.in'      => 'Status kasir tidak valid!',
         ]);
 
         if ($validator->fails()) {
@@ -130,7 +127,6 @@ class AdminController extends Controller
             'name'     => $request->name,
             'email'    => $request->email,
             'password' => $request->password ? encrypt($request->password) : $admin->password,
-            'status'   => $request->status,
         ]);
 
         return response()->json([

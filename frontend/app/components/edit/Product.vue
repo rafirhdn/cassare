@@ -96,7 +96,11 @@
                               v-for="cat in categories"
                               :key="cat.id_category"
                               type="button"
-                              @click="selectedCategory = cat.name; selectedCategoryId = cat.id_category; ddCategory = false"
+                              @click="
+                                 selectedCategory = cat.name;
+                                 selectedCategoryId = cat.id_category;
+                                 ddCategory = false
+                              "
                               class="w-full flex flex-row items-center gap-3 px-4 py-2 text-base tracking-tight hover:bg-dark-theme-800 hover:cursor-pointer">
                               {{ cat.name }}
                            </button>
@@ -131,8 +135,24 @@
                            <span :class="status ? 'text-dark-theme-50' : 'text-dark-theme-400'">{{ status || 'Pilih status produk' }}</span>
                         </button>
                         <div v-if="ddStatus" class="absolute top-12 mt-1 left-0 right-0 bg-dark-theme-900 border border-dark-theme-800 rounded-sm overflow-hidden z-10">
-                           <button type="button" @click="status = 'Tersedia'; ddStatus = false" class="w-full flex flex-row items-center gap-3 px-4 py-2 text-base tracking-tight hover:bg-dark-theme-800 hover:cursor-pointer">Tersedia</button>
-                           <button type="button" @click="status = 'Tidak Tersedia'; ddStatus = false" class="w-full flex flex-row items-center gap-3 px-4 py-2 text-base tracking-tight hover:bg-dark-theme-800 hover:cursor-pointer">Tidak Tersedia</button>
+                           <button
+                              type="button"
+                              @click="
+                                 status = 'Tersedia';
+                                 ddStatus = false
+                              "
+                              class="w-full flex flex-row items-center gap-3 px-4 py-2 text-base tracking-tight hover:bg-dark-theme-800 hover:cursor-pointer">
+                              Tersedia
+                           </button>
+                           <button
+                              type="button"
+                              @click="
+                                 status = 'Tidak Tersedia';
+                                 ddStatus = false
+                              "
+                              class="w-full flex flex-row items-center gap-3 px-4 py-2 text-base tracking-tight hover:bg-dark-theme-800 hover:cursor-pointer">
+                              Tidak Tersedia
+                           </button>
                         </div>
                      </div>
                   </div>
@@ -149,8 +169,24 @@
                            <span :class="estimate ? 'text-dark-theme-50' : 'text-dark-theme-400'">{{ estimate || 'Pilih estimasi produk' }}</span>
                         </button>
                         <div v-if="ddEstimate" class="absolute top-12 mt-1 left-0 right-0 bg-dark-theme-900 border border-dark-theme-800 rounded-sm overflow-hidden z-10">
-                           <button type="button" @click="estimate = 'Langsung Ambil'; ddEstimate = false" class="w-full flex flex-row items-center gap-3 px-4 py-2 text-base tracking-tight hover:bg-dark-theme-800 hover:cursor-pointer">Langsung Ambil</button>
-                           <button type="button" @click="estimate = '7 Hari Kerja'; ddEstimate = false" class="w-full flex flex-row items-center gap-3 px-4 py-2 text-base tracking-tight hover:bg-dark-theme-800 hover:cursor-pointer">7 Hari Kerja</button>
+                           <button
+                              type="button"
+                              @click="
+                                 estimate = 'Langsung Ambil';
+                                 ddEstimate = false
+                              "
+                              class="w-full flex flex-row items-center gap-3 px-4 py-2 text-base tracking-tight hover:bg-dark-theme-800 hover:cursor-pointer">
+                              Langsung Ambil
+                           </button>
+                           <button
+                              type="button"
+                              @click="
+                                 estimate = '7 Hari Kerja';
+                                 ddEstimate = false
+                              "
+                              class="w-full flex flex-row items-center gap-3 px-4 py-2 text-base tracking-tight hover:bg-dark-theme-800 hover:cursor-pointer">
+                              7 Hari Kerja
+                           </button>
                         </div>
                      </div>
                   </div>
@@ -167,8 +203,24 @@
                            <span :class="type ? 'text-dark-theme-50' : 'text-dark-theme-400'">{{ type || 'Pilih tipe produk' }}</span>
                         </button>
                         <div v-if="ddType" class="absolute top-12 mt-1 left-0 right-0 bg-dark-theme-900 border border-dark-theme-800 rounded-sm overflow-hidden z-10">
-                           <button type="button" @click="type = 'Pra-pesan'; ddType = false" class="w-full flex flex-row items-center gap-3 px-4 py-2 text-base tracking-tight hover:bg-dark-theme-800 hover:cursor-pointer">Pra-pesan</button>
-                           <button type="button" @click="type = 'Siap-pesan'; ddType = false" class="w-full flex flex-row items-center gap-3 px-4 py-2 text-base tracking-tight hover:bg-dark-theme-800 hover:cursor-pointer">Siap-pesan</button>
+                           <button
+                              type="button"
+                              @click="
+                                 type = 'Siap-pesan';
+                                 ddType = false
+                              "
+                              class="w-full flex flex-row items-center gap-3 px-4 py-2 text-base tracking-tight hover:bg-dark-theme-800 hover:cursor-pointer">
+                              Siap-pesan
+                           </button>
+                           <button
+                              type="button"
+                              @click="
+                                 type = 'Pra-pesan';
+                                 ddType = false
+                              "
+                              class="w-full flex flex-row items-center gap-3 px-4 py-2 text-base tracking-tight hover:bg-dark-theme-800 hover:cursor-pointer">
+                              Pra-pesan
+                           </button>
                         </div>
                      </div>
                   </div>
@@ -195,7 +247,7 @@
 // Import
 import { useCategoryStore } from '~/stores/category'
 import { useProductStore } from '~/stores/product'
-import { ref, watch, onMounted, onUnmounted } from 'vue'
+import { ref, watch, nextTick, onMounted, onUnmounted } from 'vue'
 
 // Props
 const props = defineProps({
@@ -213,9 +265,9 @@ const props = defineProps({
 })
 
 // Variable
-const emit = defineEmits(['updated'])
 const productStore = useProductStore()
 const categoryStore = useCategoryStore()
+const emit = defineEmits(['updated'])
 const editProduct = defineModel({ type: Boolean, default: false })
 const name = ref('')
 const stock = ref('')
@@ -240,24 +292,6 @@ const estimateRef = ref(null)
 const categoryRef = ref(null)
 const loading = ref(false)
 const error = ref(null)
-
-watch(editProduct, (val) => {
-   if (val) {
-      name.value = props.productName
-      stock.value = props.productStock
-      price.value = props.productPrice
-      description.value = props.productDescription
-      photo.value = props.productPhoto
-      type.value = props.productType
-      status.value = props.productStatus
-      estimate.value = props.productEstimate
-      selectedCategory.value = props.productCategoryName
-      selectedCategoryId.value = props.productCategoryId
-      photoFile.value = null
-      error.value = null
-      fetchCategories()
-   }
-})
 
 // Fetch Categories Function
 const fetchCategories = async () => {
@@ -334,6 +368,25 @@ const close = () => {
    ddCategory.value = false
    error.value = null
 }
+
+watch(editProduct, async (val) => {
+   if (val) {
+      await nextTick()
+      name.value = props.productName
+      stock.value = props.productStock
+      price.value = props.productPrice
+      description.value = props.productDescription
+      photo.value = props.productPhoto
+      type.value = props.productType
+      status.value = props.productStatus
+      estimate.value = props.productEstimate
+      selectedCategory.value = props.productCategoryName
+      selectedCategoryId.value = props.productCategoryId
+      photoFile.value = null
+      error.value = null
+      fetchCategories()
+   }
+})
 
 onMounted(() => document.addEventListener('click', handleClickOutside))
 onUnmounted(() => document.removeEventListener('click', handleClickOutside))

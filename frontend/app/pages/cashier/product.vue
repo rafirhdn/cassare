@@ -121,8 +121,9 @@ const deleteProduct = ref(false)
 
 // Open Edit Form Function
 const openEdit = (item) => {
-   selectedProduct.value = item
-   editProduct.value = true
+    console.log(item)
+    selectedProduct.value = item
+    editProduct.value = true
 }
 
 // Fetch Product Data Function
@@ -132,6 +133,7 @@ const fetchProducts = async () => {
       ...item,
       photo: `${config.public.baseKey}/uploads/product/${item.photo}`,
       category_name: item.category?.name || '',
+      id_category: item.category?.id_category || item.id_category || '',
    }))
 }
 
