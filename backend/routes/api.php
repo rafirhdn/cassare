@@ -50,6 +50,14 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/destroy', [ProductController::class, 'destroy']);
     });
 
+    // Cart
+    Route::prefix('cart')->group(function () {
+        // Store
+        Route::post('/store', [CartController::class, 'store']);
+        // Destroy
+        Route::post('/destroy', [CartController::class, 'destroy']);
+    });
+
     // Admin
     Route::prefix('admin')->group(function () {
         // Index

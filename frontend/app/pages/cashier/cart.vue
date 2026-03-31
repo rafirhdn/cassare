@@ -20,7 +20,7 @@
             </span>
 
             <!-- Button -->
-            <button class="bg-dark-theme-50 rounded-sm tracking-tight font-normal flex flex-row gap-2 py-1 px-4 hover:bg-dark-theme-400 text-dark-theme-950 hover:cursor-pointer text-sm items-center">
+            <button @click="editCart = true" class="bg-dark-theme-50 rounded-sm tracking-tight font-normal flex flex-row gap-2 py-1 px-4 hover:bg-dark-theme-400 text-dark-theme-950 hover:cursor-pointer text-sm items-center">
                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                   <rect width="24" height="24" fill="none" />
                   <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5">
@@ -74,16 +74,139 @@
             <input placeholder="Cari" type="text" class="bg-dark-theme-900 border font-normal tracking-tight border-dark-theme-800 placeholder:text-dark-theme-400 px-10 py-2 rounded-sm focus:outline-dark-theme-100 focus:outline-2 w-2xs" />
          </div>
       </div>
+
+      <!-- Wrapper -->
+      <div class="px-4 py-2 grid grid-cols-3 gap-6">
+         <!-- Card -->
+         <div v-for="item in products" :key="item.id_product" class="bg-dark-theme-900 rounded-sm p-4 flex flex-col gap-3">
+            <div class="w-full h-44 min-[1400px]:h-54 rounded-sm overflow-hidden">
+               <img :src="item.photo" :alt="item.name" class="w-full h-full object-cover" />
+            </div>
+            <div class="flex flex-col gap-2 items-baseline w-full">
+               <div class="flex flex-row items-center justify-between w-full">
+                  <span class="text-dark-theme-50 text-base tracking-tight font-normal">{{ item.name }}</span>
+                  <div :class="item.type === 'Siap-pesan' ? 'flex flex-row gap-2 items-center justify-center bg-green-950/75 px-2 py-1 rounded-sm' : 'flex flex-row gap-2 items-center justify-center bg-violet-950/50 px-2 py-1 rounded-sm'">
+                     <div :class="item.type === 'Siap-pesan' ? 'w-2 h-2 rounded-full bg-green-500' : 'w-2 h-2 rounded-full bg-violet-500'"></div>
+                     <span :class="item.type === 'Siap-pesan' ? 'text-green-500 text-xs tracking-tight font-medium' : 'text-violet-500 text-xs tracking-tight font-medium'">{{ item.type }}</span>
+                  </div>
+               </div>
+               <span class="text-dark-theme-400 text-xs tracking-tight font-normal">{{ item.description }}</span>
+            </div>
+            <div class="flex flex-col gap-2">
+               <div class="flex flex-row items-center gap-3">
+                  <span class="text-dark-theme-400 text-xs w-18 shrink-0">Harga</span>
+                  <span class="text-dark-theme-50 text-xs font-medium">{{ item.price }}</span>
+               </div>
+               <div class="flex flex-row items-center gap-3">
+                  <span class="text-dark-theme-400 text-xs w-18 shrink-0">Stok</span>
+                  <span class="text-dark-theme-50 text-xs font-medium">{{ item.stock }}</span>
+               </div>
+               <div class="flex flex-row items-center gap-3">
+                  <span class="text-dark-theme-400 text-xs w-18 shrink-0">Kategori</span>
+                  <span class="text-dark-theme-50 text-xs font-medium">{{ item.category_name }}</span>
+               </div>
+               <div class="flex flex-row items-center gap-3">
+                  <span class="text-dark-theme-400 text-xs w-18 shrink-0">Status</span>
+                  <span class="text-dark-theme-50 text-xs font-medium">{{ item.status }}</span>
+               </div>
+               <div class="flex flex-row items-center gap-3">
+                  <span class="text-dark-theme-400 text-xs w-18 shrink-0">Estimasi</span>
+                  <span class="text-dark-theme-50 text-xs font-medium">{{ item.estimate }}</span>
+               </div>
+            </div>
+            <div class="flex items-center justify-center w-full bg-white rounded-sm px-2 py-4">
+               <svg :id="`barcode-${item.id_product}`"></svg>
+            </div>
+            <!-- Button -->
+            <div class="flex flex-row gap-2">
+               <button
+                  @click="
+                     selectedProduct = item;
+                     addCart = true
+                  "
+                  class="bg-dark-theme-50 text-dark-theme-950 py-2 flex-1 text-sm font-normal tracking-tight rounded-sm hover:bg-dark-theme-400 cursor-pointer">
+                  Tambah Keranjang
+               </button>
+            </div>
+         </div>
+      </div>
+
+      <!-- Component -->
+      <AddCart v-model="addCart" :product="selectedProduct" @added="fetchProducts" @openEdit="editCart = true" />
+      <EditCart v-model="editCart" />
    </div>
 </template>
 
 <script setup>
 // Import
-import { ref, onMounted, onUnmounted } from 'vue'
+import { useProductStore } from '~/stores/product'
+import { useCartStore } from '~/stores/cart'
+import { ref, onMounted, onUnmounted, nextTick } from 'vue'
+import JsBarcode from 'jsbarcode'
 
 // Variable
+const config = useRuntimeConfig()
+const product = useProductStore()
+const cart = useCartStore()
+const products = ref([])
+const selectedProduct = ref(null)
 const filter = ref(false)
 const filterRef = ref(null)
+const addCart = ref(false)
+const editCart = ref(false)
+let barcodeBuffer = ''
+let barcodeTimer = null
+
+// Fetch Product Data Function
+const fetchProducts = async () => {
+   const data = await product.index()
+   products.value = data.data.map((item) => ({
+      ...item,
+      photo: `${config.public.baseKey}/uploads/product/${item.photo}`,
+      category_name: item.category?.name || '',
+      id_category: item.category?.id_category || item.id_category || '',
+   }))
+
+   await nextTick()
+
+   products.value.forEach((item) => {
+      const el = document.getElementById(`barcode-${item.id_product}`)
+      if (el && item.barcode) {
+         JsBarcode(el, item.barcode, {
+            format: 'CODE128',
+            width: 1.25,
+            height: 50,
+            displayValue: true,
+            fontSize: 12,
+            margin: 6,
+            background: '#ffffff',
+            lineColor: '#0a0a0a',
+         })
+      }
+   })
+}
+
+// Scan Bar Code Function
+const handleScan = (event) => {
+   if (event.key === 'Enter') {
+      if (barcodeBuffer.length > 0) {
+         const found = products.value.find((p) => p.barcode === barcodeBuffer)
+         if (found) {
+            cart.addItem(found)
+            editCart.value = true
+         }
+         barcodeBuffer = ''
+      }
+      return
+   }
+   if (event.key.length === 1) {
+      barcodeBuffer += event.key
+      clearTimeout(barcodeTimer)
+      barcodeTimer = setTimeout(() => {
+         barcodeBuffer = ''
+      }, 100)
+   }
+}
 
 // Click Outside Function
 const handleClickOutside = (event) => {
@@ -92,8 +215,15 @@ const handleClickOutside = (event) => {
    }
 }
 
-onMounted(() => document.addEventListener('click', handleClickOutside))
-onUnmounted(() => document.removeEventListener('click', handleClickOutside))
+onMounted(() => {
+   fetchProducts()
+   document.addEventListener('click', handleClickOutside)
+   document.addEventListener('keydown', handleScan)
+})
+onUnmounted(() => {
+   document.removeEventListener('click', handleClickOutside)
+   document.removeEventListener('keydown', handleScan)
+})
 
 // Layout Kasir
 definePageMeta({
