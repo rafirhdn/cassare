@@ -71,7 +71,7 @@
          <!-- Wrapper -->
          <div class="w-full flex flex-col gap-1 mt-auto">
             <!-- Link -->
-            <div
+            <!-- <div
                class="w-full py-2 px-2 rounded-sm hover:bg-dark-theme-800 hover:cursor-pointer"
                :class="{
                   'bg-dark-theme-800': active('/admin/profile'),
@@ -87,7 +87,7 @@
                   </svg>
                   Profile
                </NuxtLink>
-            </div>
+            </div> -->
 
             <!-- Button -->
             <div class="w-full py-2 px-2 rounded-sm hover:bg-dark-theme-800 hover:cursor-pointer">

@@ -292,6 +292,7 @@ const estimateRef = ref(null)
 const categoryRef = ref(null)
 const loading = ref(false)
 const error = ref(null)
+const isInitializing = ref(false)
 
 // Fetch Categories Function
 const fetchCategories = async () => {
@@ -369,8 +370,18 @@ const close = () => {
    error.value = null
 }
 
+watch(stock, (val) => {
+   if (isInitializing.value) return
+   if (parseInt(val) <= 0) {
+      status.value = 'Tidak Tersedia'
+   } else {
+      status.value = 'Tersedia'
+   }
+})
+
 watch(editProduct, async (val) => {
    if (val) {
+      isInitializing.value = true
       await nextTick()
       name.value = props.productName
       stock.value = props.productStock
@@ -385,6 +396,8 @@ watch(editProduct, async (val) => {
       photoFile.value = null
       error.value = null
       fetchCategories()
+      await nextTick()
+      isInitializing.value = false
    }
 })
 

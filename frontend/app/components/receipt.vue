@@ -1,6 +1,6 @@
 <template>
    <div v-if="receipt" class="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm">
-      <div class="bg-dark-theme-950 border border-dark-theme-800 rounded-sm p-6 w-full max-w-sm flex flex-col gap-4">
+      <div class="receipt-print bg-dark-theme-950 border border-dark-theme-800 rounded-sm p-6 w-full max-w-sm flex flex-col gap-4">
 
          <!-- Title -->
          <div class="flex flex-col items-center gap-2 border-b border-dashed border-dark-theme-700 pb-4">
@@ -85,7 +85,17 @@ const change = computed(() => {
 
 // Print Function
 const handlePrint = () => {
+   const receiptEl = document.querySelector('.receipt-print')
+   const originalBody = document.body.innerHTML
+
+   document.body.innerHTML = `
+      <div style="min-height:100vh; display:flex; align-items:center; justify-content:center;">
+         ${receiptEl.outerHTML}
+      </div>
+   `
    window.print()
+   document.body.innerHTML = originalBody
+   window.location.reload()
 }
 
 // Close Function
@@ -93,16 +103,3 @@ const close = () => {
    receipt.value = false
 }
 </script>
-
-<!-- Print -->
-<style>
-@media print {
-   /* Sembunyikan semua kecuali struk */
-   body > * {
-      display: none !important;
-   }
-   .receipt-print {
-      display: block !important;
-   }
-}
-</style>

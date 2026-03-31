@@ -185,11 +185,9 @@ class ProductController extends Controller
         ], 200);
     }
 
-    // Destroy
     public function destroy(Request $request)
     {
         $product = Product::find($request->id_product);
-
         if (!$product) {
             return response()->json([
                 'success' => false,
@@ -197,13 +195,18 @@ class ProductController extends Controller
             ], 404);
         }
 
+        if ($product->stock > 0) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Produk memiliki stok tersisa!'
+            ], 422);
+        }
+
         $oldPhoto = public_path('uploads/product/' . $product->photo);
         if (file_exists($oldPhoto)) {
             unlink($oldPhoto);
         }
-
         $product->delete();
-
         return response()->json([
             'success' => true,
             'message' => 'Produk berhasil dihapus!'

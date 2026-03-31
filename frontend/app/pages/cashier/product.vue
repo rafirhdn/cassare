@@ -73,7 +73,7 @@
       <!-- Wrapper -->
       <div class="px-4 py-2 grid grid-cols-3 gap-4">
          <!-- Card -->
-         <div v-for="item in products" :key="item.id_product" class="bg-dark-theme-900 rounded-sm p-4 flex flex-col gap-3">
+         <div v-for="item in products" :key="item.id_product" class="bg-dark-theme-900 rounded-sm p-4 flex flex-col gap-3 self-start">
             <div class="w-full h-44 min-[1400px]:h-54 rounded-sm overflow-hidden">
                <img :src="item.photo" :alt="item.name" class="w-full h-full object-cover" />
             </div>
@@ -92,13 +92,17 @@
                   Hapus
                </button>
             </div>
+
+            <div v-if="errorMap[item.id_product]" class="w-full text-dark-theme-50 bg-red-600 text-base flex flex-row items-baseline justify-baseline px-4 py-2 rounded-sm tracking-tight">
+               {{ errorMap[item.id_product] }}
+            </div>
          </div>
       </div>
 
       <!-- Component -->
       <AddProduct v-model="addProduct" @added="fetchProducts" />
       <EditProduct v-model="editProduct" :idProduct="selectedProduct?.id_product" :productName="selectedProduct?.name" :productPhoto="selectedProduct?.photo" :productStock="selectedProduct?.stock" :productPrice="selectedProduct?.price" :productDescription="selectedProduct?.description" :productType="selectedProduct?.type" :productStatus="selectedProduct?.status" :productEstimate="selectedProduct?.estimate" :productCategoryId="selectedProduct?.id_category" :productCategoryName="selectedProduct?.category_name" @updated="fetchProducts" />
-      <DeleteProduct v-model="deleteProduct" :idProduct="selectedId" @deleted="fetchProducts" />
+      <DeleteProduct v-model="deleteProduct" :idProduct="selectedId" @deleted="fetchProducts" @error="handleError" />
    </div>
 </template>
 
@@ -118,12 +122,13 @@ const filterRef = ref(null)
 const addProduct = ref(false)
 const editProduct = ref(false)
 const deleteProduct = ref(false)
+const errorMap = ref({})
 
 // Open Edit Form Function
 const openEdit = (item) => {
-    console.log(item)
-    selectedProduct.value = item
-    editProduct.value = true
+   console.log(item)
+   selectedProduct.value = item
+   editProduct.value = true
 }
 
 // Fetch Product Data Function
@@ -142,6 +147,11 @@ const handleClickOutside = (event) => {
    if (filterRef.value && !filterRef.value.contains(event.target)) {
       filter.value = false
    }
+}
+
+// Handle Error Function
+const handleError = (message) => {
+   errorMap.value[selectedId.value] = message
 }
 
 onMounted(() => {

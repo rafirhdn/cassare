@@ -28,7 +28,7 @@ import { ref } from 'vue'
 const props = defineProps({
    product: { type: Object, default: null },
 })
-const emit = defineEmits(['added', 'openEdit'])
+const emit = defineEmits(['added', 'openEdit', 'error'])
 const cart = useCartStore()  // ← ini yang kurang
 const loading = ref(false)
 const addCart = defineModel({ type: Boolean, default: false })
@@ -36,6 +36,12 @@ const addCart = defineModel({ type: Boolean, default: false })
 // Add Function
 const handleAdd = () => {
    if (!props.product) return
+   if (props.product.stock <= 0) {
+      close()
+      emit('error', props.product.id_product, 'Produk tidak punya stok!')
+      return
+   }
+
    loading.value = true
    cart.addItem(props.product)
    emit('added')

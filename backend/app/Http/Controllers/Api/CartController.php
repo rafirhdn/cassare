@@ -47,7 +47,6 @@ class CartController extends Controller
         ]);
 
         $product = Product::find($request->id_product);
-
         if ($product->stock < $request->amount) {
             return response()->json([
                 'success' => false,
@@ -56,6 +55,11 @@ class CartController extends Controller
         }
 
         $product->decrement('stock', $request->amount);
+
+        // ← tambah ini
+        if ($product->fresh()->stock <= 0) {
+            $product->update(['status' => 'Tidak Tersedia']);
+        }
 
         $cart = Cart::create([
             'id_product' => $request->id_product,

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Models\Category;
+use App\Models\Product;
 
 class CategoryController extends Controller
 {
@@ -137,8 +138,8 @@ class CategoryController extends Controller
     public function destroy(Request $request)
     {
         $id_category = $request->id_category;
-
         $category = Category::find($id_category);
+
         if (!$category) {
             return response()->json([
                 'success' => false,
@@ -146,13 +147,19 @@ class CategoryController extends Controller
             ], 404);
         }
 
+        $isUsed = Product::where('id_category', $id_category)->exists();
+        if ($isUsed) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Kategori tidak dapat dihapus karena digunakan produk!'
+            ], 422);
+        }
+
         $oldPhoto = public_path('uploads/category/' . $category->photo);
         if (file_exists($oldPhoto)) {
             unlink($oldPhoto);
         }
-
         $category->delete();
-
         return response()->json([
             'success' => true,
             'message' => 'Kategori berhasil dihapus!'

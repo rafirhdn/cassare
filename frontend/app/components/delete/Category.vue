@@ -28,7 +28,7 @@ import { ref } from 'vue'
 const props = defineProps({
    idCategory: { type: Number, default: null },
 })
-const emit = defineEmits(['deleted'])
+const emit = defineEmits(['deleted', 'error'])
 const category = useCategoryStore()
 const loading = ref(false)
 
@@ -42,9 +42,9 @@ const handleDelete = async () => {
    console.log(data)
    if (data.success) {
       emit('deleted')
-      close()
    } else {
-      console.error(data.message || 'Gagal menghapus kategori!')
+      close()
+      emit('error', data.message)
    }
    loading.value = false
 }

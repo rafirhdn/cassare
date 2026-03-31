@@ -73,7 +73,7 @@
       <!-- Wrapper -->
       <div class="px-4 py-2 grid grid-cols-3 gap-4">
          <!-- Card -->
-         <div v-for="item in categories" :key="item.id_category" class="bg-dark-theme-900 rounded-sm p-4 flex flex-col gap-3">
+         <div v-for="item in categories" :key="item.id_category" class="bg-dark-theme-900 rounded-sm p-4 flex flex-col gap-3 self-start">
             <div class="w-full h-44 min-[1400px]:h-54 rounded-sm overflow-hidden">
                <img :src="item.photo" :alt="item.name" src="" alt="" class="w-full h-full object-cover" />
             </div>
@@ -84,10 +84,16 @@
             <div class="flex flex-row gap-2">
                <button @click="openEdit(item)" class="bg-dark-theme-50 text-dark-theme-950 py-2 flex-1 text-sm font-normal tracking-tight rounded-sm hover:bg-dark-theme-400 cursor-pointer">Edit</button>
                <button
-                  @click="deleteCategory = true; selectedId = item.id_category"
+                  @click="
+                     deleteCategory = true;
+                     selectedId = item.id_category
+                  "
                   class="bg-dark-theme-800 text-dark-theme-50 py-2 flex-1 text-sm font-normal tracking-tight rounded-sm hover:bg-dark-theme-600 cursor-pointer">
                   Hapus
                </button>
+            </div>
+            <div v-if="errorMap[item.id_category]" class="w-full text-dark-theme-50 bg-red-600 text-base flex flex-row items-baseline justify-baseline px-4 py-2 rounded-sm tracking-tight">
+               {{ errorMap[item.id_category] }}
             </div>
          </div>
       </div>
@@ -95,7 +101,7 @@
       <!-- Component -->
       <AddCategory v-model="addCategory" @added="fetchCategories" />
       <EditCategory v-model="editCategory" :id-category="selectedCategory?.id_category" :category-name="selectedCategory?.name" :category-photo="selectedCategory?.photo" @updated="fetchCategories" />
-      <DeleteCategory v-model="deleteCategory" :id-category="selectedId" @deleted="fetchCategories" />
+      <DeleteCategory v-model="deleteCategory" :id-category="selectedId" @deleted="fetchCategories" @error="handleError" />
    </div>
 </template>
 
@@ -115,6 +121,7 @@ const filterRef = ref(null)
 const addCategory = ref(false)
 const editCategory = ref(false)
 const deleteCategory = ref(false)
+const errorMap = ref({})
 
 // Open Edit Form Function
 const openEdit = (item) => {
@@ -136,6 +143,11 @@ const handleClickOutside = (event) => {
    if (filterRef.value && !filterRef.value.contains(event.target)) {
       filter.value = false
    }
+}
+
+// Handle Error Function
+const handleError = (message) => {
+   errorMap.value[selectedId.value] = message
 }
 
 onMounted(() => {

@@ -28,7 +28,7 @@ import { ref } from 'vue'
 const props = defineProps({
    idProduct: { type: Number, default: null },
 })
-const emit = defineEmits(['deleted'])
+const emit = defineEmits(['deleted', 'error'])
 const product = useProductStore()
 const loading = ref(false)
 
@@ -39,12 +39,11 @@ const deleteProduct = defineModel({ type: Boolean, default: false })
 const handleDelete = async () => {
    loading.value = true
    const data = await product.destroy(props.idProduct)
-   console.log(data)
    if (data.success) {
       emit('deleted')
-      close()
    } else {
-      console.error(data.message || 'Gagal menghapus product!')
+      close()
+      emit('error', data.message)
    }
    loading.value = false
 }
