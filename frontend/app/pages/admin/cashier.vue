@@ -66,62 +66,62 @@
          </div>
       </div>
 
-      <!-- Wrapper -->
-      <div class="py-2 px-4 w-full">
-         <div class="w-full rounded-sm overflow-hidden border border-dark-theme-800">
-            <table class="w-full table-auto border-collapse">
-               <thead class="text-dark-theme-50 bg-dark-theme-900">
-                  <tr>
-                     <td class="text-base tracking-tight font-medium px-4 py-2 border-b border-r border-dark-theme-800">No.</td>
-                     <td class="text-base tracking-tight font-medium px-4 py-2 border-b border-r border-dark-theme-800">Nama</td>
-                     <td class="text-base tracking-tight font-medium px-4 py-2 border-b border-r border-dark-theme-800">Email</td>
-                     <td class="text-base tracking-tight font-medium px-4 py-2 border-b border-r border-dark-theme-800">Password</td>
-                     <td class="text-base tracking-tight font-medium px-4 py-2 border-b border-r border-dark-theme-800">Kontrol</td>
-                     <td class="text-base tracking-tight font-medium px-4 py-2 border-b border-r border-dark-theme-800">Status</td>
-                     <td class="text-base tracking-tight font-medium px-4 py-2 border-b border-r border-dark-theme-800">Aksi</td>
-                  </tr>
-               </thead>
-               <tbody>
-                  <tr v-for="(item, index) in cashiers" :key="item.id_admin">
-                     <td class="border-r border-dark-theme-800 px-4 py-3">
-                        <span class="text-dark-theme-200 text-sm tracking-tight">{{ index + 1 }}.</span>
-                     </td>
-                     <td class="border-r border-dark-theme-800 px-4 py-3">
-                        <span class="text-dark-theme-200 text-sm tracking-tight">{{ item.name }}</span>
-                     </td>
-                     <td class="border-r border-dark-theme-800 px-4 py-3">
-                        <span class="text-dark-theme-200 text-sm tracking-tight">{{ item.email }}</span>
-                     </td>
-                     <td class="border-r border-dark-theme-800 px-4 py-3">
-                        <span class="text-dark-theme-200 text-sm tracking-tight">{{ item.password }}</span>
-                     </td>
-                     <td class="px-4 py-3 border-r border-dark-theme-800">
-                        <button @click="handleUnblock(item)" :disabled="item.status !== 'Blokir'" :class="item.status === 'Blokir' ? 'cursor-pointer hover:bg-dark-theme-400' : 'cursor-not-allowed opacity-50'" class="text-dark-theme-950 text-sm tracking-tight bg-dark-theme-50 px-3 py-1 rounded-sm">Aktifkan</button>
-                     </td>
-                     <td class="border-r border-dark-theme-800 px-4 py-3">
-                        <div class="bg-dark-theme-800/50 py-1 px-4 text-center rounded-4xl w-max flex flex-row items-center gap-3">
-                           <div :class="item.status === 'Aktif' ? 'bg-green-400' : 'bg-red-400'" class="w-2 h-2 rounded-full"></div>
-                           <span :class="item.status === 'Aktif' ? 'text-green-400' : 'text-red-400'" class="text-dark-theme-200 text-sm tracking-tight">{{ item.status }}</span>
-                        </div>
-                     </td>
-                     <td class="px-4 py-3">
-                        <div class="flex flex-row gap-2">
-                           <button @click="openEdit(item)" class="text-dark-theme-950 text-sm tracking-tight bg-dark-theme-50 hover:bg-dark-theme-400 px-3 py-1 rounded-sm cursor-pointer">Edit</button>
-                           <button
-                              @click="
-                                 deleteCashier = true;
-                                 selectedId = item.id_admin
-                              "
-                              class="text-dark-theme-50 text-sm tracking-tight bg-dark-theme-800 hover:bg-dark-theme-600 cursor-pointer px-3 py-1 rounded-sm">
-                              Hapus
-                           </button>
-                        </div>
-                     </td>
-                  </tr>
-               </tbody>
-            </table>
-         </div>
-      </div>
+        <!-- Wrapper -->
+        <div class="py-2 px-4 w-full">
+            <div class="w-full rounded-sm overflow-hidden border border-dark-theme-800">
+                <table class="w-full table-auto border-collapse">
+                <thead class="text-dark-theme-50 bg-dark-theme-900">
+                    <tr>
+                        <td class="text-base tracking-tight font-medium px-4 py-2 border-b border-r border-dark-theme-800">No.</td>
+                        <td class="text-base tracking-tight font-medium px-4 py-2 border-b border-r border-dark-theme-800">Nama</td>
+                        <td class="text-base tracking-tight font-medium px-4 py-2 border-b border-r border-dark-theme-800">Email</td>
+                        <td class="text-base tracking-tight font-medium px-4 py-2 border-b border-r border-dark-theme-800">Password</td>
+                        <td class="text-base tracking-tight font-medium px-4 py-2 border-b border-r border-dark-theme-800">Kontrol</td>
+                        <td class="text-base tracking-tight font-medium px-4 py-2 border-b border-r border-dark-theme-800">Status</td>
+                        <td class="text-base tracking-tight font-medium px-4 py-2 border-b border-r border-dark-theme-800">Aksi</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(item, index) in cashiers" :key="item.id_admin">
+                        <td class="border-r border-dark-theme-800 px-4 py-3">
+                            <span class="text-dark-theme-200 text-sm tracking-tight">{{ index + 1 }}.</span>
+                        </td>
+                        <td class="border-r border-dark-theme-800 px-4 py-3">
+                            <span class="text-dark-theme-200 text-sm tracking-tight">{{ item.name }}</span>
+                        </td>
+                        <td class="border-r border-dark-theme-800 px-4 py-3">
+                            <span class="text-dark-theme-200 text-sm tracking-tight">{{ item.email }}</span>
+                        </td>
+                        <td class="border-r border-dark-theme-800 px-4 py-3">
+                            <span class="text-dark-theme-200 text-sm tracking-tight">{{ item.password }}</span>
+                        </td>
+                        <td class="px-4 py-3 border-r border-dark-theme-800">
+                            <button @click="handleUnblock(item)" :disabled="item.status !== 'Blokir'" :class="item.status === 'Blokir' ? 'cursor-pointer hover:bg-dark-theme-400' : 'cursor-not-allowed opacity-50'" class="text-dark-theme-950 text-sm tracking-tight bg-dark-theme-50 px-3 py-1 rounded-sm">Aktifkan</button>
+                        </td>
+                        <td class="border-r border-dark-theme-800 px-4 py-3">
+                            <div class="bg-dark-theme-800/50 py-1 px-4 text-center rounded-4xl w-max flex flex-row items-center gap-3">
+                            <div :class="item.status === 'Aktif' ? 'bg-green-400' : 'bg-red-400'" class="w-2 h-2 rounded-full"></div>
+                            <span :class="item.status === 'Aktif' ? 'text-green-400' : 'text-red-400'" class="text-dark-theme-200 text-sm tracking-tight">{{ item.status }}</span>
+                            </div>
+                        </td>
+                        <td class="px-4 py-3">
+                            <div class="flex flex-row gap-2">
+                            <button @click="openEdit(item)" class="text-dark-theme-950 text-sm tracking-tight bg-dark-theme-50 hover:bg-dark-theme-400 px-3 py-1 rounded-sm cursor-pointer">Edit</button>
+                            <button
+                                @click="
+                                    deleteCashier = true;
+                                    selectedId = item.id_admin
+                                "
+                                class="text-dark-theme-50 text-sm tracking-tight bg-dark-theme-800 hover:bg-dark-theme-600 cursor-pointer px-3 py-1 rounded-sm">
+                                Hapus
+                            </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+                </table>
+            </div>
+        </div>
 
       <!-- Component -->
       <AddCashier v-model="addCashier" @added="fetchCashiers" />

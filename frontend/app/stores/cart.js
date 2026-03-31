@@ -19,6 +19,42 @@ export const useCartStore = defineStore('cart', {
          return localStorage.getItem('token')
       },
 
+      // Index
+      async index() {
+         const config = useRuntimeConfig()
+         try {
+            const response = await fetch(`${config.public.apiKey}/cart/index`, {
+               method: 'GET',
+               headers: {
+                  Authorization: `Bearer ${this.getToken()}`,
+                  'Content-Type': 'application/json',
+                  Accept: 'application/json',
+               },
+               credentials: 'include',
+            })
+            const data = await response.json()
+            console.log('Response:', data)
+            console.log('Token:', this.getToken())
+            if (data.success) {
+               this.items = data.data.map((item) => ({
+                  id_cart: item.id_cart,
+                  id_product: item.id_product,
+                  product_name: item.product_name,
+                  price: item.price,
+                  raw_price: parseFloat(String(item.price).replace(/[^0-9]/g, '')),
+                  estimate: item.product?.estimate ?? null,
+                  amount: 1,
+                  total: item.price,
+                  admin_name: item.admin_name ?? null,
+                  time: item.time ?? item.created_at ?? null,
+               }))
+            }
+            return data
+         } catch (error) {
+            console.error('Gagal mengambil data keranjang:', error)
+         }
+      },
+
       // Add Item
       addItem(product) {
          const existing = this.items.find((i) => i.id_product === product.id_product)

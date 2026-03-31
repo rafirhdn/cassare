@@ -52,6 +52,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Cart
     Route::prefix('cart')->group(function () {
+        // Index
+        Route::get('/index', [CartController::class, 'index']);
         // Store
         Route::post('/store', [CartController::class, 'store']);
         // Destroy

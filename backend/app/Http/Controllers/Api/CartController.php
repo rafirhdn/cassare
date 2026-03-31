@@ -9,6 +9,34 @@ use App\Models\Cart;
 
 class CartController extends Controller
 {
+    // Index
+    public function index(Request $request)
+    {
+        $carts = Cart::with('product', 'admin')
+            ->where('id_admin', $request->user()->id_admin)
+            ->get()
+            ->map(function ($cart) {
+                return [
+                    'id_cart'      => $cart->id_cart,
+                    'id_product'   => $cart->id_product,
+                    'price'        => $cart->price,
+                    'time'         => $cart->time,
+                    'admin_name'   => $cart->admin->name ?? null,
+                    'product_name' => $cart->product->name ?? null,
+                ];
+            });
+
+        return response()->json([
+            'success' => true,
+            'data'    => $carts,
+        ]);
+
+        dd([
+            'user_id_admin' => $request->user()->id_admin,
+            'cart_data'     => Cart::all()->pluck('id_admin')->toArray(),
+        ]);
+    }
+
     // Store
     public function store(Request $request)
     {

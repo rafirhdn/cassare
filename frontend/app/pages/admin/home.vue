@@ -32,8 +32,8 @@
          <!-- Card -->
          <div class="w-full rounded-lg bg-dark-theme-900 border border-dark-theme-800 px-6 py-4 flex flex-col items-baseline justify-baseline gap-2">
             <div class="flex flex-col items-baseline justify-baseline gap-1">
-               <span class="text-dark-theme-200 text-md tracking-tight">Total Perhitungan Laporan</span>
-               <span class="text-dark-theme-50 text-4xl tracking-tight">Rp 57.212</span>
+               <span class="text-dark-theme-200 text-md tracking-tight">Total Transaksi Dilakukan</span>
+               <span class="text-dark-theme-50 text-4xl tracking-tight">20</span>
             </div>
             <div>
                <span class="text-dark-theme-400 text-sm tracking-tight">Jumlah seluruh keuntungan di laporan.</span>
