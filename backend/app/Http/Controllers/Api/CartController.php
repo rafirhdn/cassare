@@ -9,11 +9,10 @@ use App\Models\Cart;
 
 class CartController extends Controller
 {
-    // Index
-    public function index(Request $request)
+    // Index All
+    public function indexAll()
     {
         $carts = Cart::with('product', 'admin')
-            ->where('id_admin', $request->user()->id_admin)
             ->get()
             ->map(function ($cart) {
                 return [
@@ -27,6 +26,37 @@ class CartController extends Controller
                     'product_name' => $cart->product->name ?? null,
                 ];
             });
+
+        return response()->json([
+            'success' => true,
+            'data'    => $carts,
+        ]);
+    }
+
+    // Index
+    public function index(Request $request)
+    {
+        $user = $request->user();
+
+        $query = Cart::with('product', 'admin');
+
+        if ($user->level !== 'Admin') {
+            $query->where('id_admin', $user->id_admin);
+        }
+
+        $carts = $query->get()->map(function ($cart) {
+            return [
+                'id_cart'      => $cart->id_cart,
+                'id_product'   => $cart->id_product,
+                'payment'      => $cart->payment,
+                'price'        => $cart->price,
+                'change'       => $cart->change,
+                'time'         => $cart->time,
+                'admin_name'   => $cart->admin->name ?? null,
+                'product_name' => $cart->product->name ?? null,
+            ];
+        });
+
         return response()->json([
             'success' => true,
             'data'    => $carts,

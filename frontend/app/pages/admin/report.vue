@@ -66,29 +66,37 @@
                <thead class="text-dark-theme-50 bg-dark-theme-900">
                   <tr>
                      <td class="text-base tracking-tight font-medium px-4 py-2 border-b border-r border-dark-theme-800">No.</td>
-                     <td class="text-base tracking-tight font-medium px-4 py-2 border-b border-r border-dark-theme-800">Kasir</td>
+                     <td class="text-base tracking-tight font-medium px-4 py-2 border-b border-r border-dark-theme-800">Akun</td>
                      <td class="text-base tracking-tight font-medium px-4 py-2 border-b border-r border-dark-theme-800">Produk</td>
+                     <td class="text-base tracking-tight font-medium px-4 py-2 border-b border-r border-dark-theme-800">Pembayaran</td>
                      <td class="text-base tracking-tight font-medium px-4 py-2 border-b border-r border-dark-theme-800">Total</td>
+                     <td class="text-base tracking-tight font-medium px-4 py-2 border-b border-r border-dark-theme-800">Kembalian</td>
                      <td class="text-base tracking-tight font-medium px-4 py-2 border-b border-r border-dark-theme-800">Tanggal</td>
                      <td class="text-base tracking-tight font-medium px-4 py-2 border-b border-r border-dark-theme-800">Waktu</td>
                   </tr>
                </thead>
                <tbody>
                   <tr v-if="carts.length === 0">
-                     <td colspan="6" class="text-center text-dark-theme-400 text-sm px-4 py-4 tracking-tight">Tidak ada data.</td>
+                     <td colspan="8" class="text-center text-dark-theme-400 text-sm px-4 py-4 tracking-tight">Tidak ada data.</td>
                   </tr>
                   <tr v-for="(item, index) in carts" :key="item.id_cart" class="border-b border-dark-theme-800 last:border-0">
                      <td class="border-r border-dark-theme-800 px-4 py-3">
-                        <span class="text-dark-theme-200 text-sm tracking-tight">{{ index + 1 }}</span>
+                        <span class="text-dark-theme-200 text-sm tracking-tight">{{ index + 1 }}.</span>
                      </td>
                      <td class="border-r border-dark-theme-800 px-4 py-3">
-                        <span class="text-dark-theme-200 text-sm tracking-tight">{{ item.admin_name}}</span>
+                        <span class="text-dark-theme-200 text-sm tracking-tight">{{ item.admin_name }}</span>
                      </td>
                      <td class="border-r border-dark-theme-800 px-4 py-3">
-                        <span class="text-dark-theme-200 text-sm tracking-tight">{{ item.product_name}}</span>
+                        <span class="text-dark-theme-200 text-sm tracking-tight">{{ item.product_name }}</span>
+                     </td>
+                     <td class="border-r border-dark-theme-800 px-4 py-3">
+                        <span class="text-green-500 text-sm tracking-tight">{{ item.payment }}</span>
                      </td>
                      <td class="border-r border-dark-theme-800 px-4 py-3">
                         <span class="text-dark-theme-200 text-sm tracking-tight">{{ item.price }}</span>
+                     </td>
+                     <td class="border-r border-dark-theme-800 px-4 py-3">
+                        <span class="text-yellow-500 text-sm tracking-tight">{{ item.change }}</span>
                      </td>
                      <td class="border-r border-dark-theme-800 px-4 py-3">
                         <span class="text-dark-theme-200 text-sm tracking-tight">{{ formatDate(item.time) }}</span>
@@ -117,30 +125,33 @@ const carts = ref([])
 
 // Fetch Data Function
 const fetchCarts = async () => {
-   const data = await cartStore.index()
-   console.log('Response:', data)
-   console.log('Data:', data?.data)
+   const data = await cartStore.indexAll()
    carts.value = data.data
 }
 
 // Format Date Function
 const formatDate = (datetime) => {
    if (!datetime) return '-'
-   return new Date(datetime).toLocaleDateString('id-ID', {
+   const normalized = datetime.replace(' ', 'T') + 'Z'
+   return new Date(normalized).toLocaleDateString('id-ID', {
       day: '2-digit',
       month: 'long',
       year: 'numeric',
+      timeZone: 'Asia/Jakarta',
    })
 }
 
 // Format Time Function
 const formatTime = (datetime) => {
    if (!datetime) return '-'
-   return new Date(datetime).toLocaleTimeString('id-ID', {
+   const normalized = datetime.replace(' ', 'T') + 'Z'
+   return new Date(normalized).toLocaleTimeString('id-ID', {
       hour: '2-digit',
       minute: '2-digit',
+      timeZone: 'Asia/Jakarta',
    })
 }
+
 // Click Outside Function
 const handleClickOutside = (event) => {
    if (filterRef.value && !filterRef.value.contains(event.target)) {

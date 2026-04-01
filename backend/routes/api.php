@@ -52,6 +52,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Cart
     Route::prefix('cart')->group(function () {
+        // Index All
+        Route::get('/indexAll', [CartController::class, 'indexAll']);
         // Index
         Route::get('/index', [CartController::class, 'index']);
         // Store

@@ -21,6 +21,26 @@ export const useCartStore = defineStore('cart', {
          return localStorage.getItem('token')
       },
 
+      // Index All
+      async indexAll() {
+         const config = useRuntimeConfig()
+         try {
+            const response = await fetch(`${config.public.apiKey}/cart/indexAll`, {
+               method: 'GET',
+               headers: {
+                  Authorization: `Bearer ${this.getToken()}`,
+                  'Content-Type': 'application/json',
+                  Accept: 'application/json',
+               },
+               credentials: 'include',
+            })
+            const data = await response.json()
+            return data
+         } catch (error) {
+            console.error('Gagal mengambil semua data keranjang:', error)
+         }
+      },
+
       // Index
       async index() {
          const config = useRuntimeConfig()
