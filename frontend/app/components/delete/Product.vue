@@ -39,10 +39,11 @@ const deleteProduct = defineModel({ type: Boolean, default: false })
 const handleDelete = async () => {
    loading.value = true
    const data = await product.destroy(props.idProduct)
+   close()
+
    if (data.success) {
       emit('deleted')
    } else {
-      close()
       emit('error', data.message)
    }
    loading.value = false

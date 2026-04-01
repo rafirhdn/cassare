@@ -78,16 +78,18 @@
       <!-- Wrapper -->
       <div class="px-4 py-2 grid grid-cols-3 gap-6">
          <!-- Card -->
-         <div v-for="item in products" :key="item.id_product" class="bg-dark-theme-900 rounded-sm p-4 flex flex-col gap-3 self-start">
+         <div v-for="item in products" :key="item.id_product" class="bg-dark-theme-900 rounded-sm p-4 flex flex-col gap-3 self-start border border-dark-theme-800">
             <div class="w-full h-44 min-[1400px]:h-54 rounded-sm overflow-hidden">
                <img :src="item.photo" :alt="item.name" class="w-full h-full object-cover" />
             </div>
             <div class="flex flex-col gap-2 items-baseline w-full">
                <div class="flex flex-row items-center justify-between w-full">
                   <span class="text-dark-theme-50 text-base tracking-tight font-normal">{{ item.name }}</span>
-                  <div :class="item.type === 'Siap-pesan' ? 'flex flex-row gap-2 items-center justify-center bg-green-950/75 px-2 py-1 rounded-sm' : 'flex flex-row gap-2 items-center justify-center bg-violet-950/50 px-2 py-1 rounded-sm'">
-                     <div :class="item.type === 'Siap-pesan' ? 'w-2 h-2 rounded-full bg-green-500' : 'w-2 h-2 rounded-full bg-violet-500'"></div>
-                     <span :class="item.type === 'Siap-pesan' ? 'text-green-500 text-xs tracking-tight font-medium' : 'text-violet-500 text-xs tracking-tight font-medium'">{{ item.type }}</span>
+                  <div :class="item.stock === 0 ? 'flex flex-row gap-2 items-center justify-center bg-red-950/75 px-2 py-1 rounded-sm' : item.type === 'Siap-pesan' ? 'flex flex-row gap-2 items-center justify-center bg-green-950/75 px-2 py-1 rounded-sm' : 'flex flex-row gap-2 items-center justify-center bg-violet-950/50 px-2 py-1 rounded-sm'">
+                     <div :class="item.stock === 0 ? 'w-2 h-2 rounded-full bg-red-500' : item.type === 'Siap-pesan' ? 'w-2 h-2 rounded-full bg-green-500' : 'w-2 h-2 rounded-full bg-violet-500'"></div>
+                     <span :class="item.stock === 0 ? 'text-red-500 text-xs tracking-tight font-medium' : item.type === 'Siap-pesan' ? 'text-green-500 text-xs tracking-tight font-medium' : 'text-violet-500 text-xs tracking-tight font-medium'">
+                        {{ item.stock === 0 ? 'Habis' : item.type }}
+                     </span>
                   </div>
                </div>
                <span class="text-dark-theme-400 text-xs tracking-tight font-normal">{{ item.description }}</span>
@@ -159,8 +161,46 @@ const filterRef = ref(null)
 const addCart = ref(false)
 const editCart = ref(false)
 const errorMap = ref({})
-let barcodeBuffer = ''
-let barcodeTimer = null
+const scanBuffer = ref('')
+const scanTimeout = ref(null)
+
+// Handle Scan Function
+const handleScan = (e) => {
+   if (e.key === 'Enter') {
+      const barcode = scanBuffer.value.trim()
+      scanBuffer.value = ''
+
+      if (!barcode) return
+      const found = products.value.find((p) => p.barcode === barcode)
+      if (!found) {
+         return
+      }
+
+      if (found.stock <= 0) {
+         errorMap.value[found.id_product] = 'Produk tidak punya stok!'
+         setTimeout(() => { errorMap.value[found.id_product] = null }, 3000)
+         return
+      }
+
+      const existing = cart.items.find((i) => i.id_product === found.id_product)
+      if (existing && existing.amount >= existing.maxStock) {
+         errorMap.value[found.id_product] = 'Stok produk sudah mencapai batas maksimal!'
+         setTimeout(() => { errorMap.value[found.id_product] = null }, 3000)
+         return
+      }
+
+      cart.addItem(found)
+      editCart.value = true
+
+   } else if (e.key.length === 1) {
+      scanBuffer.value += e.key
+
+      clearTimeout(scanTimeout.value)
+      scanTimeout.value = setTimeout(() => {
+         scanBuffer.value = ''
+      }, 100)
+   }
+}
 
 // Handle Error Function
 const handleError = (id_product, message) => {
@@ -185,8 +225,8 @@ const fetchProducts = async () => {
          JsBarcode(el, item.barcode, {
             format: 'CODE128',
             width: 1.25,
-            height: 50,
-            displayValue: true,
+            height: 75,
+            displayValue: false,
             fontSize: 12,
             margin: 6,
             background: '#ffffff',
@@ -194,28 +234,6 @@ const fetchProducts = async () => {
          })
       }
    })
-}
-
-// Scan Bar Code Function
-const handleScan = (event) => {
-   if (event.key === 'Enter') {
-      if (barcodeBuffer.length > 0) {
-         const found = products.value.find((p) => p.barcode === barcodeBuffer)
-         if (found) {
-            cart.addItem(found)
-            editCart.value = true
-         }
-         barcodeBuffer = ''
-      }
-      return
-   }
-   if (event.key.length === 1) {
-      barcodeBuffer += event.key
-      clearTimeout(barcodeTimer)
-      barcodeTimer = setTimeout(() => {
-         barcodeBuffer = ''
-      }, 100)
-   }
 }
 
 // Click Outside Function
@@ -230,12 +248,14 @@ onMounted(() => {
    document.addEventListener('click', handleClickOutside)
    document.addEventListener('keydown', handleScan)
 })
+
 onUnmounted(() => {
    document.removeEventListener('click', handleClickOutside)
    document.removeEventListener('keydown', handleScan)
+   clearTimeout(scanTimeout.value)
 })
 
-// Layout Kasir
+// Layout Cashier
 definePageMeta({
    layout: 'cashier',
 })

@@ -14,7 +14,7 @@ class Cart extends Model
 
     public $timestamps = true; // Timestamps
 
-    protected $fillable = ['id_cart', 'price', 'time', 'id_admin', 'id_product']; // Field Table
+    protected $fillable = ['id_cart', 'payment', 'price', 'change', 'time', 'id_admin', 'id_product']; // Field Table
 
     public function product()
     {

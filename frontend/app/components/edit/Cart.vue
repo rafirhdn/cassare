@@ -32,7 +32,7 @@
                   <div class="flex flex-row items-center justify-center gap-2">
                      <button @click="decreaseAmount(item)" class="w-7 h-7 flex items-center justify-center bg-dark-theme-800 text-dark-theme-50 rounded-sm hover:bg-dark-theme-600 cursor-pointer text-sm">-</button>
                      <span class="text-dark-theme-50 text-sm w-4 text-center">{{ item.amount }}</span>
-                     <button @click="increaseAmount(item)" class="w-7 h-7 flex items-center justify-center bg-dark-theme-800 text-dark-theme-50 rounded-sm hover:bg-dark-theme-600 cursor-pointer text-sm">+</button>
+                     <button @click="increaseAmount(item)" :disabled="item.amount >= item.maxStock" :class="item.amount >= item.maxStock ? 'w-7 h-7 flex items-center justify-center bg-dark-theme-800 text-dark-theme-400 rounded-sm cursor-not-allowed text-sm opacity-50' : 'w-7 h-7 flex items-center justify-center bg-dark-theme-800 text-dark-theme-50 rounded-sm hover:bg-dark-theme-600 cursor-pointer text-sm'">+</button>
                   </div>
 
                   <span class="text-dark-theme-50 text-sm tracking-tight text-center">{{ item.price }}</span>
@@ -78,7 +78,10 @@
 
             <div class="flex flex-col gap-2">
                <span class="text-dark-theme-50 text-sm font-medium tracking-tight">Nominal Pembayaran</span>
-               <input v-model="paymentAmount" @input="touched = true" type="text" placeholder="Masukkan nominal pembayaran" class="bg-dark-theme-900 border text-dark-theme-50 text-sm tracking-tight px-4 py-2 rounded-sm focus:outline-2 w-full" :class="touched && error ? 'border-red-500 focus:outline-red-500' : 'border-dark-theme-800 focus:outline-dark-theme-100'" />
+               <div class="flex flex-row items-center bg-dark-theme-900 border rounded-sm overflow-hidden" :class="touched && error ? 'border-red-500' : 'border-dark-theme-800'">
+                  <span class="text-dark-theme-50 text-sm px-3 py-2 border-r border-dark-theme-800 shrink-0">Rp</span>
+                  <input v-model="paymentAmount" @input="handlePaymentInput" type="text" placeholder="0" class="bg-transparent text-dark-theme-50 text-sm tracking-tight px-3 py-2 focus:outline-none w-full" />
+               </div>
             </div>
 
             <div class="bg-dark-theme-900 border border-dark-theme-800 rounded-sm px-4 py-3 flex flex-row items-center justify-between">
@@ -117,6 +120,7 @@ const selectedDeleteId = ref(null)
 const showReceipt = ref(false)
 const receiptItems = ref([])
 const receiptPayment = ref(0)
+const rawPayment = ref('')
 const loading = ref(false)
 const touched = ref(false)
 
@@ -132,7 +136,8 @@ const totalPrice = computed(() => {
 // Change Computed
 const changeAmount = computed(() => {
    const total = cartStore.items.reduce((sum, item) => sum + item.amount * item.raw_price, 0)
-   const paid = parseFloat(paymentAmount.value) || 0
+   if (!rawPayment.value) return 'Rp 0'
+   const paid = parseInt(rawPayment.value) || 0
    const result = paid - total
    return `Rp ${Math.max(0, result).toLocaleString('id-ID')}`
 })
@@ -140,13 +145,27 @@ const changeAmount = computed(() => {
 // Decrease Amount Function
 const decreaseAmount = (item) => {
    const found = cartStore.items.find((i) => i.id_product === item.id_product)
-   if (found && found.amount > 1) found.amount--
+   if (found && found.amount > 1) {
+      found.amount--
+      found.total = `Rp ${(found.raw_price * found.amount).toLocaleString('id-ID')}`
+   }
 }
 
 // Increase Amount Function
 const increaseAmount = (item) => {
    const found = cartStore.items.find((i) => i.id_product === item.id_product)
-   if (found) found.amount++
+   if (found && found.amount < found.maxStock) {
+      found.amount++
+      found.total = `Rp ${(found.raw_price * found.amount).toLocaleString('id-ID')}`
+   }
+}
+
+// Handle Payment Input Function
+const handlePaymentInput = (e) => {
+   touched.value = true
+   const digits = e.target.value.replace(/\D/g, '')
+   rawPayment.value = digits
+   paymentAmount.value = digits ? parseInt(digits).toLocaleString('id-ID') : ''
 }
 
 // Make Receipt Function
@@ -154,7 +173,7 @@ const handleMakeReceipt = async () => {
    if (cartStore.items.length === 0) return
    loading.value = true
    receiptItems.value = [...cartStore.items]
-   receiptPayment.value = parseFloat(paymentAmount.value) || 0
+   receiptPayment.value = parseInt(rawPayment.value) || 0
 
    const result = await cartStore.storeAll(receiptPayment.value)
    loading.value = false
@@ -162,6 +181,7 @@ const handleMakeReceipt = async () => {
    if (result.success) {
       editCart.value = false
       paymentAmount.value = ''
+      rawPayment.value = ''
       touched.value = false
       await nextTick()
       showReceipt.value = true
@@ -172,8 +192,8 @@ const handleMakeReceipt = async () => {
 const error = computed(() => {
    if (!touched.value) return null
    const total = cartStore.items.reduce((sum, item) => sum + item.amount * item.raw_price, 0)
-   const paid = parseFloat(paymentAmount.value) || 0
-   if (!paymentAmount.value || paid <= 0) return 'Cantumkan nominal pembayaran!'
+   if (!rawPayment.value || rawPayment.value === '0') return 'Cantumkan nominal pembayaran!'
+   const paid = parseInt(rawPayment.value) || 0
    if (paid < total) return 'Nominal pembayaran tidak mencukupi!'
    return null
 })
@@ -182,6 +202,7 @@ const error = computed(() => {
 const close = () => {
    editCart.value = false
    paymentAmount.value = ''
+   rawPayment.value = ''
    touched.value = false
 }
 </script>

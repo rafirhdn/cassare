@@ -6,6 +6,8 @@ export const useCartStore = defineStore('cart', {
       items: [],
       name: '',
       price: '',
+      payment: '',
+      change: '',
       id_product: null,
    }),
 
@@ -40,10 +42,12 @@ export const useCartStore = defineStore('cart', {
                   id_cart: item.id_cart,
                   id_product: item.id_product,
                   product_name: item.product_name,
+                  payment: item.payment ?? null,
                   price: item.price,
+                  change: item.change ?? null,
                   raw_price: parseFloat(String(item.price).replace(/[^0-9]/g, '')),
                   estimate: item.product?.estimate ?? null,
-                  amount: 1,
+                  stock: 1,
                   total: item.price,
                   admin_name: item.admin_name ?? null,
                   time: item.time ?? item.created_at ?? null,
@@ -55,7 +59,7 @@ export const useCartStore = defineStore('cart', {
          }
       },
 
-      // Add Item
+      // Store
       addItem(product) {
          const existing = this.items.find((i) => i.id_product === product.id_product)
          if (existing) {
@@ -64,36 +68,15 @@ export const useCartStore = defineStore('cart', {
             this.items.push({
                id_product: product.id_product,
                product_name: product.name,
+               payment: '',
                price: product.price,
+               change: '',
                raw_price: parseFloat(String(product.price).replace(/[^0-9]/g, '')),
                estimate: product.estimate,
                amount: 1,
+               maxStock: product.stock,
                total: product.price,
             })
-         }
-      },
-
-      // Store
-      async store() {
-         const config = useRuntimeConfig()
-         try {
-            const response = await fetch(`${config.public.apiKey}/cart/store`, {
-               method: 'POST',
-               headers: {
-                  Authorization: `Bearer ${this.getToken()}`,
-                  'Content-Type': 'application/json',
-                  Accept: 'application/json',
-               },
-               credentials: 'include',
-               body: JSON.stringify({
-                  id_product: this.id_product,
-                  price: this.price,
-               }),
-            })
-            const data = await response.json()
-            return data
-         } catch (error) {
-            console.error('Gagal menambahkan ke keranjang:', error)
          }
       },
 
@@ -119,7 +102,7 @@ export const useCartStore = defineStore('cart', {
       },
 
       // Store All
-      async storeAll() {
+      async storeAll(paymentAmount) {
          const config = useRuntimeConfig()
 
          if (this.items.length === 0) {
@@ -128,12 +111,14 @@ export const useCartStore = defineStore('cart', {
 
          const results = []
          let hasError = false
-
          const token = localStorage.getItem('token')
+         const totalPrice = this.items.reduce((sum, item) => sum + item.raw_price * item.amount, 0)
+         const payment = parseInt(paymentAmount) || 0
+         const change = Math.max(0, payment - totalPrice)
+         const formatRupiah = (number) => `Rp ${number.toLocaleString('id-ID')}`
 
          for (const item of this.items) {
-            const rawPrice = parseFloat(String(item.price).replace(/[^0-9]/g, ''))
-
+            const itemTotal = item.raw_price * item.amount
             try {
                const response = await fetch(`${config.public.apiKey}/cart/store`, {
                   method: 'POST',
@@ -145,8 +130,10 @@ export const useCartStore = defineStore('cart', {
                   credentials: 'include',
                   body: JSON.stringify({
                      id_product: item.id_product,
-                     price: rawPrice * item.amount,
-                     amount: item.amount,
+                     payment: formatRupiah(payment),
+                     price: formatRupiah(itemTotal),
+                     change: formatRupiah(change),
+                     stock: item.amount,
                   }),
                })
 

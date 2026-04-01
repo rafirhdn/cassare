@@ -18,11 +18,7 @@
       <!-- Wrapper -->
       <div class="w-full h-screen py-4 px-2 flex flex-col items-baseline gap-1">
          <!-- Link -->
-         <div
-            class="w-full py-2 px-2 rounded-sm hover:bg-dark-theme-800 hover:cursor-pointer"
-            :class="{
-               'bg-dark-theme-800': active('/cashier/home'),
-            }">
+         <div class="w-full py-2 px-2 rounded-sm hover:bg-dark-theme-800 hover:cursor-pointer" :class="{ 'bg-dark-theme-800': isActive === '/cashier/home' }">
             <NuxtLink to="/cashier/home" class="flex flex-row gap-2 text-base tracking-tight">
                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                   <rect width="24" height="24" fill="none" />
@@ -33,11 +29,7 @@
          </div>
 
          <!-- Link -->
-         <div
-            class="w-full py-2 px-2 rounded-sm hover:bg-dark-theme-800 hover:cursor-pointer"
-            :class="{
-               'bg-dark-theme-800': active('/cashier/category'),
-            }">
+         <div class="w-full py-2 px-2 rounded-sm hover:bg-dark-theme-800 hover:cursor-pointer" :class="{ 'bg-dark-theme-800': isActive === '/cashier/category' }">
             <NuxtLink to="/cashier/category" class="flex flex-row gap-2 text-base tracking-tight">
                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                   <rect width="24" height="24" fill="none" />
@@ -53,11 +45,7 @@
          </div>
 
          <!-- Link -->
-         <div
-            class="w-full py-2 px-2 rounded-sm hover:bg-dark-theme-800 hover:cursor-pointer"
-            :class="{
-               'bg-dark-theme-800': active('/cashier/product'),
-            }">
+         <div class="w-full py-2 px-2 rounded-sm hover:bg-dark-theme-800 hover:cursor-pointer" :class="{ 'bg-dark-theme-800': isActive === '/cashier/product' }">
             <NuxtLink to="/cashier/product" class="flex flex-row gap-2 text-base tracking-tight">
                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                   <rect width="24" height="24" fill="none" />
@@ -71,11 +59,7 @@
          </div>
 
          <!-- Link -->
-         <div
-            class="w-full py-2 px-2 rounded-sm hover:bg-dark-theme-800 hover:cursor-pointer"
-            :class="{
-               'bg-dark-theme-800': active('/cashier/transaction'),
-            }">
+         <div class="w-full py-2 px-2 rounded-sm hover:bg-dark-theme-800 hover:cursor-pointer" :class="{ 'bg-dark-theme-800': isActive === '/cashier/cart' }">
             <NuxtLink to="/cashier/cart" class="flex flex-row gap-2 text-base tracking-tight">
                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                   <rect width="24" height="24" fill="none" />
@@ -90,27 +74,22 @@
             </NuxtLink>
          </div>
 
+         <!-- Link -->
+         <div class="w-full py-2 px-2 rounded-sm hover:bg-dark-theme-800 hover:cursor-pointer" :class="{ 'bg-dark-theme-800': isActive === '/cashier/report' }">
+            <NuxtLink to="/cashier/report" class="flex flex-row gap-2 text-base tracking-tight">
+               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                  <rect width="24" height="24" fill="none" />
+                  <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5">
+                     <path d="M22 22H12c-4.714 0-7.071 0-8.536-1.465C2 19.072 2 16.714 2 12V9m0-7v3" />
+                     <path d="m19 7l-3.118 3.926c-.477.602-.716.903-.99 1.05a1.5 1.5 0 0 1-1.357.029c-.28-.135-.531-.425-1.035-1.005s-.755-.87-1.035-1.005a1.5 1.5 0 0 0-1.356.03c-.274.146-.513.447-.99 1.048L6 15" />
+                  </g>
+               </svg>
+               Laporan
+            </NuxtLink>
+         </div>
+
          <!-- Wrapper -->
          <div class="w-full flex flex-col gap-1 mt-auto">
-            <!-- Link -->
-            <!-- <div
-               class="w-full py-2 px-2 rounded-sm hover:bg-dark-theme-800 hover:cursor-pointer"
-               :class="{
-                  'bg-dark-theme-800': active('/cashier/profile'),
-               }">
-               <NuxtLink to="/cashier/profile" class="flex flex-row gap-2 text-base tracking-tight">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                     <rect width="24" height="24" fill="none" />
-                     <g fill="none" stroke="currentColor" stroke-width="1.5">
-                        <circle cx="12" cy="9" r="3" />
-                        <path stroke-linecap="round" d="M17.97 20c-.16-2.892-1.045-5-5.97-5s-5.81 2.108-5.97 5" />
-                        <path stroke-linecap="round" d="M7 3.338A9.95 9.95 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5" />
-                     </g>
-                  </svg>
-                  Profile
-               </NuxtLink>
-            </div> -->
-
             <!-- Button -->
             <div class="w-full py-2 px-2 rounded-sm hover:bg-dark-theme-800 hover:cursor-pointer">
                <button @click="auth.logout().then(() => $router.push('/login'))" class="flex flex-row gap-2 text-base tracking-tight hover:cursor-pointer">
@@ -132,11 +111,12 @@
 <script setup>
 // Import
 import { useAuthenticationStore } from '~/stores/authentication'
+import { computed } from 'vue'
 
 // Variable
 const auth = useAuthenticationStore()
 const route = useRoute()
 
 // Check Route Function
-const active = (path) => route.path === path || route.path.startsWith(path)
+const isActive = computed(() => route.path)
 </script>

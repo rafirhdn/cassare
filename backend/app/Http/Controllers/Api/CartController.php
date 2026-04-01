@@ -19,21 +19,17 @@ class CartController extends Controller
                 return [
                     'id_cart'      => $cart->id_cart,
                     'id_product'   => $cart->id_product,
+                    'payment'      => $cart->payment,
                     'price'        => $cart->price,
+                    'change'       => $cart->change,
                     'time'         => $cart->time,
                     'admin_name'   => $cart->admin->name ?? null,
                     'product_name' => $cart->product->name ?? null,
                 ];
             });
-
         return response()->json([
             'success' => true,
             'data'    => $carts,
-        ]);
-
-        dd([
-            'user_id_admin' => $request->user()->id_admin,
-            'cart_data'     => Cart::all()->pluck('id_admin')->toArray(),
         ]);
     }
 
@@ -42,32 +38,30 @@ class CartController extends Controller
     {
         $request->validate([
             'id_product' => 'required|integer|exists:product,id_product',
-            'price'      => 'required|numeric|min:0',
-            'amount'     => 'required|integer|min:1',
+            'payment'    => 'required|string|max:255',
+            'price'      => 'required|string|max:255',
+            'change'     => 'required|string|max:255',
+            'stock'      => 'required|integer|min:1',
         ]);
-
         $product = Product::find($request->id_product);
-        if ($product->stock < $request->amount) {
+        if ($product->stock < $request->stock) {
             return response()->json([
                 'success' => false,
                 'message' => "Stok {$product->name} tidak mencukupi! Sisa stok: {$product->stock}",
             ], 422);
         }
-
-        $product->decrement('stock', $request->amount);
-
-        // ← tambah ini
+        $product->decrement('stock', $request->stock);
         if ($product->fresh()->stock <= 0) {
             $product->update(['status' => 'Tidak Tersedia']);
         }
-
         $cart = Cart::create([
             'id_product' => $request->id_product,
+            'payment'    => $request->payment,
             'price'      => $request->price,
+            'change'     => $request->change,
             'time'       => now(),
             'id_admin'   => $request->user()->id_admin,
         ]);
-
         return response()->json([
             'success' => true,
             'message' => 'Produk berhasil ditambahkan ke keranjang!',
@@ -79,16 +73,13 @@ class CartController extends Controller
     public function destroy(Request $request)
     {
         $cart = Cart::find($request->id_cart);
-
         if (!$cart) {
             return response()->json([
                 'success' => false,
                 'message' => 'Item keranjang tidak ditemukan!'
             ], 404);
         }
-
         $cart->delete();
-
         return response()->json([
             'success' => true,
             'message' => 'Item berhasil dihapus dari keranjang!'

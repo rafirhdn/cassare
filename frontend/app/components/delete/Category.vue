@@ -39,11 +39,11 @@ const deleteCategory = defineModel({ type: Boolean, default: false })
 const handleDelete = async () => {
    loading.value = true
    const data = await category.destroy(props.idCategory)
-   console.log(data)
+   close()
+
    if (data.success) {
       emit('deleted')
    } else {
-      close()
       emit('error', data.message)
    }
    loading.value = false

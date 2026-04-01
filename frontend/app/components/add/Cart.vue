@@ -42,6 +42,13 @@ const handleAdd = () => {
       return
    }
 
+   const existing = cart.items.find((i) => i.id_product === props.product.id_product)
+   if (existing && existing.amount >= existing.maxStock) {
+      close()
+      emit('error', props.product.id_product, 'Stok produk sudah mencapai batas maksimal!')
+      return
+   }
+
    loading.value = true
    cart.addItem(props.product)
    emit('added')
