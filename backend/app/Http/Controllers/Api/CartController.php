@@ -24,6 +24,8 @@ class CartController extends Controller
                     'time'         => $cart->time,
                     'admin_name'   => $cart->admin->name ?? null,
                     'product_name' => $cart->product->name ?? null,
+                    'product_type' => $cart->product->type ?? null,
+                    'product_estimate' => $cart->product->estimate ?? null,
                 ];
             });
 
@@ -54,6 +56,8 @@ class CartController extends Controller
                 'time'         => $cart->time,
                 'admin_name'   => $cart->admin->name ?? null,
                 'product_name' => $cart->product->name ?? null,
+                'product_type' => $cart->product->type ?? null,
+                'product_estimate' => $cart->product->estimate ?? null,
             ];
         });
 

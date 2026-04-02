@@ -13,12 +13,33 @@
 
          <!-- Wrapper -->
          <div class="flex flex-col gap-2">
-            <div v-for="item in items" :key="item.id_product" class="flex flex-row items-start justify-between gap-2">
-               <div class="flex flex-col gap-1">
-                  <span class="text-dark-theme-50 text-sm tracking-tight">{{ item.product_name }}</span>
-                  <span class="text-dark-theme-400 text-sm tracking-tight">{{ item.amount }} x Rp {{ item.raw_price.toLocaleString('id-ID') }}</span>
+            <!-- Wrapper -->
+            <div class="flex flex-col gap-2">
+               <div v-for="item in items" :key="item.id_product" class="flex flex-row items-start justify-between gap-2 pb-2 border-b border-dark-theme-800 last:border-0">
+                  <!-- Kiri: Info Produk -->
+                  <div class="flex flex-col gap-1">
+                     <span class="text-dark-theme-50 text-sm tracking-tight font-medium">{{ item.product_name }}</span>
+
+                     <!-- Badge Tipe & Estimasi -->
+                     <div class="flex flex-row gap-2">
+                        <!-- Tipe -->
+                        <div :class="item.product_type === 'Siap-pesan' ? 'flex flex-row gap-1 items-center bg-green-950/75 px-2 py-0.5 rounded-sm' : item.product_type === 'Pra-pesan' ? 'flex flex-row gap-1 items-center bg-violet-950/50 px-2 py-0.5 rounded-sm' : 'flex flex-row gap-1 items-center bg-dark-theme-800 px-2 py-0.5 rounded-sm'">
+                           <span :class="item.product_type === 'Siap-pesan' ? 'text-green-500 text-xs tracking-tight' : item.product_type === 'Pra-pesan' ? 'text-violet-500 text-xs tracking-tight' : 'text-dark-theme-400 text-xs tracking-tight'">{{ item.product_type }}</span>
+                        </div>
+
+                        <!-- Estimasi -->
+                        <div class="text-dark-theme-400 flex flex-row gap-1 items-center bg-dark-theme-800 px-2 py-0.5 rounded-sm">
+                           <span class="text-xs tracking-tight">{{ item.product_estimate }}</span>
+                        </div>
+                     </div>
+
+                     <!-- Jumlah -->
+                     <span class="text-dark-theme-400 text-xs tracking-tight">{{ item.amount }} x Rp {{ item.raw_price.toLocaleString('id-ID') }}</span>
+                  </div>
+
+                  <!-- Kanan: Total Harga -->
+                  <span class="text-dark-theme-50 text-sm tracking-tight font-medium whitespace-nowrap">Rp {{ (item.raw_price * item.amount).toLocaleString('id-ID') }}</span>
                </div>
-               <span class="text-dark-theme-50 text-sm tracking-tight font-medium whitespace-nowrap">Rp {{ (item.raw_price * item.amount).toLocaleString('id-ID') }}</span>
             </div>
          </div>
 

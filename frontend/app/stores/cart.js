@@ -4,7 +4,7 @@ export const useCartStore = defineStore('cart', {
    // State (Save Data)
    state: () => ({
       items: [],
-      name: '',
+      type: '',
       price: '',
       payment: '',
       change: '',
@@ -61,12 +61,13 @@ export const useCartStore = defineStore('cart', {
                this.items = data.data.map((item) => ({
                   id_cart: item.id_cart,
                   id_product: item.id_product,
-                  product_name: item.product_name,
+                  product_name:item.product_name ?? null,
+                  product_type: item.product_type ?? null,
+                  product_estimate: item.product_estimate ?? null,
                   payment: item.payment ?? null,
                   price: item.price,
                   change: item.change ?? null,
                   raw_price: parseFloat(String(item.price).replace(/[^0-9]/g, '')),
-                  estimate: item.product?.estimate ?? null,
                   stock: 1,
                   total: item.price,
                   admin_name: item.admin_name ?? null,
@@ -79,7 +80,7 @@ export const useCartStore = defineStore('cart', {
          }
       },
 
-      // Store
+      // Store (Add Item to Local Cart)
       addItem(product) {
          const existing = this.items.find((i) => i.id_product === product.id_product)
          if (existing) {
@@ -87,12 +88,13 @@ export const useCartStore = defineStore('cart', {
          } else {
             this.items.push({
                id_product: product.id_product,
-               product_name: product.name,
+               product_name:product.name ?? null,
+               product_type: product.type ?? null,
+               product_estimate: product.estimate ?? null,
                payment: '',
                price: product.price,
                change: '',
                raw_price: parseFloat(String(product.price).replace(/[^0-9]/g, '')),
-               estimate: product.estimate,
                amount: 1,
                maxStock: product.stock,
                total: product.price,

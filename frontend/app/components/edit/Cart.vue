@@ -1,6 +1,6 @@
 <template>
    <div v-if="editCart" class="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm">
-      <div class="grid grid-cols-[1fr_320px] bg-dark-theme-950 max-w-5xl w-full rounded-sm border border-dark-theme-800 max-h-[90vh]">
+      <div class="grid grid-cols-[1fr_320px] bg-dark-theme-950 max-w-6xl w-full rounded-sm border border-dark-theme-800 max-h-[90vh]">
          <!-- Wrapper -->
          <div class="flex flex-col gap-4 p-6 overflow-y-auto border-r border-dark-theme-800">
             <div class="flex flex-col gap-1">
@@ -15,16 +15,17 @@
             </div>
 
             <div class="bg-dark-theme-900 rounded-sm p-4 flex flex-col gap-4">
-               <div class="grid grid-cols-6 gap-2 pb-2 border-b border-dark-theme-800">
+               <div class="grid grid-cols-7 gap-2 pb-2 border-b border-dark-theme-800">
                   <span class="text-dark-theme-200 text-xs tracking-tight text-center">Produk</span>
                   <span class="text-dark-theme-200 text-xs tracking-tight text-center">Jumlah</span>
                   <span class="text-dark-theme-200 text-xs tracking-tight text-center">Harga</span>
                   <span class="text-dark-theme-200 text-xs tracking-tight text-center">Total</span>
+                  <span class="text-dark-theme-200 text-xs tracking-tight text-center">Tipe</span>
                   <span class="text-dark-theme-200 text-xs tracking-tight text-center">Estimasi</span>
                   <span class="text-dark-theme-200 text-xs tracking-tight text-center">Aksi</span>
                </div>
 
-               <div v-for="item in carts" :key="item.id_product" class="grid grid-cols-6 gap-4 items-center py-2 border-b border-dark-theme-800 last:border-0">
+               <div v-for="item in carts" :key="item.id_product" class="grid grid-cols-7 gap-4 items-center py-2 border-b border-dark-theme-800 last:border-0">
                   <div class="flex flex-col gap-1">
                      <span class="text-dark-theme-50 text-sm tracking-tight font-medium">{{ item.product_name }}</span>
                   </div>
@@ -39,8 +40,18 @@
 
                   <span class="text-green-500 text-sm tracking-tight text-center font-medium">{{ item.total }}</span>
 
+                  <!-- Tipe -->
                   <div class="flex flex-row items-center justify-center gap-3">
-                     <div class="bg-dark-theme-800 text-dark-theme-50 text-xs px-2 py-1 rounded-sm text-center">{{ item.estimate }}</div>
+                     <div :class="item.product_type === 'Siap-pesan' ? 'flex flex-row gap-2 items-center justify-center bg-green-950/75 px-2 py-1 rounded-sm' : item.product_type === 'Pra-pesan' ? 'flex flex-row gap-2 items-center justify-center bg-violet-950/50 px-2 py-1 rounded-sm' : 'flex flex-row gap-2 items-center justify-center bg-dark-theme-800 px-2 py-1 rounded-sm'">
+                        <span :class="item.product_type === 'Siap-pesan' ? 'text-green-500 text-xs tracking-tight font-medium' : item.product_type === 'Pra-pesan' ? 'text-violet-500 text-xs tracking-tight font-medium' : 'text-dark-theme-400 text-xs tracking-tight font-medium'">
+                           {{ item.product_type }}
+                        </span>
+                     </div>
+                  </div>
+
+                  <!-- Estimasi -->
+                  <div class="flex flex-row items-center justify-center gap-3">
+                     <div class="bg-dark-theme-800 text-dark-theme-50 text-xs px-2 py-1 rounded-sm text-center">{{ item.product_estimate }}</div>
                   </div>
 
                   <button

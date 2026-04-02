@@ -1,7 +1,7 @@
 <template>
    <div class="font-mono">
       <!-- Wrapper -->
-      <div class="w-full border-b border-dark-theme-800 px-4 py-5 flex flex-row">
+      <div class="w-full border-b border-dark-theme-800 px-4 py-4 flex flex-row justify-between items-center">
          <!-- Title -->
          <div>
             <span class="text-dark-theme-50 text-base tracking-tight flex flex-row gap-2">
@@ -17,6 +17,14 @@
                Laporan
             </span>
          </div>
+
+         <button @click="exportExcel" class="bg-dark-theme-50 rounded-sm flex flex-row gap-2 py-1 px-4 hover:bg-dark-theme-400 text-dark-theme-950 hover:cursor-pointer text-sm font-normal tracking-tight items-center ml-auto">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+               <rect width="24" height="24" fill="none" />
+               <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3v13m0 0l4-4.375M12 16l-4-4.375M15 21H9c-2.828 0-4.243 0-5.121-.879C3 19.243 3 17.828 3 15m18 0c0 2.828 0 4.243-.879 5.121c-.3.3-.662.498-1.121.628" />
+            </svg>
+            Export .xlsx
+         </button>
       </div>
 
       <!-- Wrapper -->
@@ -61,6 +69,18 @@
 
       <!-- Wrapper -->
       <div class="py-2 px-4 w-full">
+         <div class="bg-dark-theme-900 border border-dark-theme-800 rounded-sm px-4 py-2">
+            <div>
+               <span class="text-dark-theme-50 text-base font-medium tracking-tight">Total Transaksi Harian</span>
+            </div>
+            <div class="mt-4 h-64">
+               <canvas ref="chartRef"></canvas>
+            </div>
+         </div>
+      </div>
+
+      <!-- Wrapper -->
+      <div class="py-2 px-4 w-full">
          <div class="w-full rounded-sm overflow-hidden border border-dark-theme-800">
             <table class="w-full table-auto border-collapse">
                <thead class="text-dark-theme-50 bg-dark-theme-900">
@@ -69,15 +89,16 @@
                      <td class="text-base tracking-tight font-medium px-4 py-2 border-b border-r border-dark-theme-800">Akun</td>
                      <td class="text-base tracking-tight font-medium px-4 py-2 border-b border-r border-dark-theme-800">Produk</td>
                      <td class="text-base tracking-tight font-medium px-4 py-2 border-b border-r border-dark-theme-800">Pembayaran</td>
-                     <td class="text-base tracking-tight font-medium px-4 py-2 border-b border-r border-dark-theme-800">Total</td>
+                     <td class="text-base tracking-tight font-medium px-4 py-2 border-b border-r border-dark-theme-800">Harga</td>
                      <td class="text-base tracking-tight font-medium px-4 py-2 border-b border-r border-dark-theme-800">Kembalian</td>
+                     <td class="text-base tracking-tight font-medium px-4 py-2 border-b border-r border-dark-theme-800">Tipe</td>
                      <td class="text-base tracking-tight font-medium px-4 py-2 border-b border-r border-dark-theme-800">Tanggal</td>
                      <td class="text-base tracking-tight font-medium px-4 py-2 border-b border-r border-dark-theme-800">Waktu</td>
                   </tr>
                </thead>
                <tbody>
                   <tr v-if="carts.length === 0">
-                     <td colspan="8" class="text-center text-dark-theme-400 text-sm px-4 py-4 tracking-tight">Tidak ada data.</td>
+                     <td colspan="9" class="text-center text-dark-theme-400 text-sm px-4 py-4 tracking-tight">Tidak ada data.</td>
                   </tr>
                   <tr v-for="(item, index) in carts" :key="item.id_cart" class="border-b border-dark-theme-800 last:border-0">
                      <td class="border-r border-dark-theme-800 px-4 py-3">
@@ -99,6 +120,13 @@
                         <span class="text-yellow-500 text-sm tracking-tight">{{ item.change }}</span>
                      </td>
                      <td class="border-r border-dark-theme-800 px-4 py-3">
+                        <div :class="item.product_type === 'Siap-pesan' ? 'flex flex-row gap-2 items-center justify-center bg-green-950/75 px-2 py-1 rounded-sm' : item.product_type === 'Pra-pesan' ? 'flex flex-row gap-2 items-center justify-center bg-violet-950/50 px-2 py-1 rounded-sm' : 'flex flex-row gap-2 items-center justify-center bg-dark-theme-800 px-2 py-1 rounded-sm'">
+                           <span :class="item.product_type === 'Siap-pesan' ? 'text-green-500 text-xs tracking-tight font-medium' : item.product_type === 'Pra-pesan' ? 'text-violet-500 text-xs tracking-tight font-medium' : 'text-dark-theme-400 text-xs tracking-tight font-medium'">
+                              {{ item.product_type }}
+                           </span>
+                        </div>
+                     </td>
+                     <td class="border-r border-dark-theme-800 px-4 py-3">
                         <span class="text-dark-theme-200 text-sm tracking-tight">{{ formatDate(item.time) }}</span>
                      </td>
                      <td class="border-r border-dark-theme-800 px-4 py-3">
@@ -113,23 +141,175 @@
 </template>
 
 <script setup>
-// Import
 import { useCartStore } from '~/stores/cart'
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue'
+import { Chart, registerables } from 'chart.js'
+import * as XLSX from 'xlsx'
 
-// Variable
+Chart.register(...registerables)
+
 const cartStore = useCartStore()
 const filter = ref(false)
 const filterRef = ref(null)
 const carts = ref([])
+const chartRef = ref(null)
+let chartInstance = null
 
-// Fetch Data Function
+// Fetch Data
 const fetchCarts = async () => {
    const data = await cartStore.indexAll()
    carts.value = data.data
+   await nextTick()
+   renderChart()
 }
 
-// Format Date Function
+const exportExcel = () => {
+   if (carts.value.length === 0) return
+
+   const rows = carts.value.map((item, index) => ({
+      'No.': index + 1,
+      Akun: item.admin_name ?? '-',
+      Produk: item.product_name ?? '-',
+      Pembayaran: item.payment ?? '-',
+      Harga: item.price ?? '-',
+      Kembalian: item.change ?? '-',
+      Tipe: item.product_type ?? '-',
+      Tanggal: formatDate(item.time),
+      Waktu: formatTime(item.time),
+   }))
+
+   const worksheet = XLSX.utils.json_to_sheet([])
+
+   XLSX.utils.sheet_add_aoa(worksheet, [['Laporan Transaksi Admin']], { origin: 'A1' })
+
+   XLSX.utils.sheet_add_aoa(worksheet, [['']], { origin: 'A2' })
+
+   XLSX.utils.sheet_add_json(worksheet, rows, { origin: 'A3' })
+
+   const totalRows = rows.length + 3
+   const colKeys = Object.keys(rows[0])
+   const totalCols = colKeys.length
+
+   worksheet['!merges'] = [{ s: { r: 0, c: 0 }, e: { r: 0, c: totalCols - 1 } }]
+
+   worksheet['A1'].s = {
+      font: { bold: true, sz: 14 },
+      alignment: { horizontal: 'center', vertical: 'center' },
+   }
+
+   const borderStyle = {
+      top: { style: 'thin', color: { rgb: '000000' } },
+      bottom: { style: 'thin', color: { rgb: '000000' } },
+      left: { style: 'thin', color: { rgb: '000000' } },
+      right: { style: 'thin', color: { rgb: '000000' } },
+   }
+
+   for (let R = 2; R < totalRows; R++) {
+      for (let C = 0; C < totalCols; C++) {
+         const cellAddress = XLSX.utils.encode_cell({ r: R, c: C })
+         if (!worksheet[cellAddress]) worksheet[cellAddress] = { v: '' }
+         worksheet[cellAddress].s = {
+            border: borderStyle,
+            font: R === 2 ? { bold: true } : { bold: false },
+            alignment: { horizontal: 'left', vertical: 'center' },
+         }
+      }
+   }
+
+   worksheet['!cols'] = colKeys.map((key) => ({
+      wch: Math.max(key.length, ...rows.map((r) => String(r[key]).length)) + 2,
+   }))
+
+   const workbook = XLSX.utils.book_new()
+   XLSX.utils.book_append_sheet(workbook, worksheet, 'Laporan')
+
+   const filename = `Laporan_Transaksi_Admin_${new Date().toLocaleDateString('id-ID').replace(/\//g, '-')}.xlsx`
+   XLSX.writeFile(workbook, filename, { cellStyles: true })
+}
+
+// Chart
+const chartData = computed(() => {
+   const grouped = {}
+
+   carts.value.forEach((item) => {
+      if (!item.time) return
+      const normalized = item.time.replace(' ', 'T') + 'Z'
+      const date = new Date(normalized).toLocaleDateString('id-ID', {
+         day: '2-digit',
+         month: 'short',
+         year: 'numeric',
+         timeZone: 'Asia/Jakarta',
+      })
+      grouped[date] = (grouped[date] || 0) + 1
+   })
+
+   const sorted = Object.entries(grouped).sort(([a], [b]) => new Date(a) - new Date(b))
+
+   return {
+      labels: sorted.map(([date]) => date),
+      values: sorted.map(([, count]) => count),
+   }
+})
+
+// Render Chart
+const renderChart = () => {
+   if (!chartRef.value) return
+
+   if (chartInstance) {
+      chartInstance.destroy()
+      chartInstance = null
+   }
+
+   const { labels, values } = chartData.value
+
+   chartInstance = new Chart(chartRef.value, {
+      type: 'line',
+      data: {
+         labels,
+         datasets: [
+            {
+               data: values,
+               borderColor: '#ffffff',
+               backgroundColor: 'rgba(255, 255, 255, 0.05)',
+               borderWidth: 2,
+               pointBackgroundColor: '#ffffff',
+               pointRadius: 4,
+               tension: 0.4,
+               fill: true,
+            },
+         ],
+      },
+      options: {
+         responsive: true,
+         maintainAspectRatio: false,
+         plugins: {
+            legend: { display: false },
+            tooltip: {
+               callbacks: {
+                  label: (ctx) => ` ${ctx.parsed.y} transaksi`,
+               },
+            },
+         },
+         scales: {
+            x: {
+               ticks: { color: '#94a3b8', font: { family: 'monospace', size: 11 } },
+               grid: { color: 'rgba(255,255,255,0.05)' },
+            },
+            y: {
+               beginAtZero: true,
+               ticks: {
+                  color: '#94a3b8',
+                  font: { family: 'monospace', size: 11 },
+                  stepSize: 1,
+               },
+               grid: { color: 'rgba(255,255,255,0.05)' },
+            },
+         },
+      },
+   })
+}
+
+// Format functions (tetap sama)
 const formatDate = (datetime) => {
    if (!datetime) return '-'
    const normalized = datetime.replace(' ', 'T') + 'Z'
@@ -141,7 +321,6 @@ const formatDate = (datetime) => {
    })
 }
 
-// Format Time Function
 const formatTime = (datetime) => {
    if (!datetime) return '-'
    const normalized = datetime.replace(' ', 'T') + 'Z'
@@ -152,7 +331,6 @@ const formatTime = (datetime) => {
    })
 }
 
-// Click Outside Function
 const handleClickOutside = (event) => {
    if (filterRef.value && !filterRef.value.contains(event.target)) {
       filter.value = false
@@ -163,9 +341,11 @@ onMounted(async () => {
    await fetchCarts()
    document.addEventListener('click', handleClickOutside)
 })
-onUnmounted(() => document.removeEventListener('click', handleClickOutside))
 
-definePageMeta({
-   layout: 'admin',
+onUnmounted(() => {
+   document.removeEventListener('click', handleClickOutside)
+   if (chartInstance) chartInstance.destroy()
 })
+
+definePageMeta({ layout: 'admin' })
 </script>
