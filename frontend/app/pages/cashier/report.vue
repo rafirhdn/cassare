@@ -72,7 +72,7 @@
       <div class="py-2 px-4 w-full">
          <div class="bg-dark-theme-900 border border-dark-theme-800 rounded-sm px-4 py-2">
             <div>
-               <span class="text-dark-theme-50 text-base font-medium tracking-tight">Total Transaksi</span>
+               <span class="text-dark-theme-50 text-base font-medium tracking-tight">Total Transaksi Harian</span>
             </div>
             <div class="mt-4 h-64">
                <canvas ref="chartRef"></canvas>
